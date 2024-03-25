@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="../css/chat.css" />
+<div class="chat-container">
+    <body>
+        <header class="chat-header">
+            <h2>ChatBot</h2>
+        </header>
+        <ul class="chat-messages">
+            <li class="servidor">Bienvenido/a <%=nombre%>, soy <text>Alexa</text> tu asistente virtual, ¿en que puedo ayudarte?</li>
+            <li class="cliente">Hola, encantado/a de conocerte, yo soy <%=nombre%></li>
+        </ul>
+        <div class="chat-input">
+            <textarea placeholder="Enviar mensaje..." spellcheck="false" required></textarea>
+            <button class="send-button"><img src="../img/enviar.png"></button>
+        </div>
+    </body>
+    <script>
+        const nombre = "<%=nombre%>"
+    </script>
+    <script src="../script/actualizar_chat.js"></script>    
+</div>

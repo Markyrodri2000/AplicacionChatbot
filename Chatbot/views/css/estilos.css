@@ -1,0 +1,231 @@
+.grid {
+    display: grid;
+    grid-template-columns: 50% 10% 50%;
+    margin-right: 5%;
+}
+.lineusingborder {
+    margin-top:50px;
+    margin-left: 50%;
+    border-left: 2px solid rgb(10, 2, 29);
+    height: 600px;
+    margin-bottom: 2%;
+}
+body {
+    font-family: 'Overpass', sans-serif;
+    font-weight: normal;
+    font-size: 100%;
+    color: #1b262c;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: rgba(255, 165, 0, 0.6);
+    background-image: url('../img/background_4.jpg');
+    background-size: 100%;
+}
+
+#contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    margin: 0;
+    padding: 0;
+    min-width: 100vw;
+    min-height: 80vh;
+    width: 100%;
+    height: 100%;
+}
+
+#central {
+    max-width: 320px;
+    width: 100%;
+}
+
+.titulo {
+    font-size: 250%;
+    color:#000102;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#login {
+    width: 100%;
+    padding: 50px 30px;
+    background-color: rgba(255, 165, 0, 0.6);
+    
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    
+    box-sizing: border-box;
+}
+
+#login input {
+    font-family: 'Overpass', sans-serif;
+    font-size: 110%;
+    color: #1b262c;
+    
+    display: block;
+    width: 100%;
+    height: 40px;
+    
+    margin-bottom: 10px;
+    padding: 5px 5px 5px 10px;
+    
+    box-sizing: border-box;
+    
+    border: none;
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+#login input::placeholder {
+    font-family: 'Overpass', sans-serif;
+    color: #000102;
+}
+
+#login button {
+    font-family: 'Overpass', sans-serif;
+    font-size: 110%;
+    color:#1b262c;
+    width: 100%;
+    height: 40px;
+    border: none;
+    
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    
+    background-color: #bbe1fa;
+    
+    margin-top: 10px;
+}
+
+#login button:hover {
+    background-color: #0f4c75;
+    color:#bbe1fa;
+}
+
+.pie-form {
+    font-size: 90%;
+    text-align: center;    
+    margin-top: 15px;
+}
+
+.pie-form a {
+    display: block;
+    text-decoration: none;
+    color: #000102;
+    margin-bottom: 3px;
+}
+
+.pie-form a:hover {
+    color: #0f4c75;
+}
+
+.inferior {
+    margin-top: 10px;
+    font-size: 90%;
+    text-align: center;
+}
+
+.inferior a {
+    display: block;
+    text-decoration: none;
+    color: #000102;
+    margin-bottom: 3px;
+}
+
+.inferior a:hover {
+    color: #3282b8;
+}
+
+header {
+    background-color: rgba(255, 165, 0, 0.6);
+    padding: 10px 0;
+    text-align: center;
+    backdrop-filter: blur(5px); /* Agrega difuminado al fondo de la barra de navegación */
+}
+
+nav {
+    display: flex;
+    justify-content: center; /* Centra los elementos hijos horizontalmente */
+}
+
+.elementos {
+    display: flex;
+    align-items: center;
+}
+
+.elementos h1 {
+    display: flex;
+    align-items: center;
+}
+
+.elementos ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin-left: auto; /* Mueve la lista ul a la derecha */
+}
+
+.elementos li {
+    margin: 0 15px;
+}
+
+.elementos a {
+    text-decoration: none;
+    color: black; /* Cambia el color a negro */
+    border: 2px solid black; /* Cambia el color del borde a negro */
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.elementos a:hover {
+    background-color: white;
+    color: orange;
+}
+
+.elementos h1 img {
+    margin-right: 10px;
+    height: 30px;
+    width: auto;
+}
+#Bienvenida {
+    text-align: center; /* Centra el texto */
+    margin-top: 50px; /* Ajusta el margen superior según tus necesidades */
+    color: black; /* Color del texto */
+    font-family: 'Arial', sans-serif; /* Cambia la fuente según tus preferencias */
+    font-size: 24px; /* Tamaño del texto */
+}
+
+.cambiar_psw, .generate_token {
+    z-index: 1;
+    display: none; /* Oculta el span inicialmente */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0; /* Puedes ajustar el color de fondo según tus preferencias */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra para un aspecto elevado */
+}
+#Contraseña{
+    width: 300px;
+}
+p img{
+    width: 15px;
+    height: 15px;
+    float:right;
+    margin-left: 10px;
+}
+.token_key_ocultado{
+    display:none;
+}

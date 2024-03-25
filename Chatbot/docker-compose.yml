@@ -1,0 +1,29 @@
+version: '2.24.6'
+
+services:
+  db:
+      image: mysql:8.0
+      container_name: db_chatbot
+      environment:
+        - MYSQL_ROOT_PASSWORD=00280300
+        - MYSQL_DATABASE=Nistrica
+      ports:
+      - 3006:3006
+      volumes:
+        - ./backup/Nistrica.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: chatbot
+    depends_on:
+      - db
+    links:
+      - db
+    container_name: app_chatbot
+    ports: 
+      - 3000:3000
+    volumes:
+      - .:/app_chatbot
+      - /app_chatbot/node_modules
+    command: npm run dev

@@ -1,0 +1,145 @@
+.chat-container {
+    margin: 50px auto 0; 
+    margin-right: 20%;
+    margin-top:50px;
+    margin-bottom: 2%;
+    max-height: 450px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #fff; 
+}
+
+.chat-header {
+    background-color: #ffa500;
+    color: #000000;
+    padding: 10px;
+    text-align: center;
+}
+
+.chat-messages {
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    height: 500px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-color:#d3b378;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.message span {
+    font-weight: bold;
+    color: black;
+}
+
+.message p {
+    margin: 0;
+}
+
+.chat-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ccc;
+}
+
+.chat-input textarea {
+    height: 20px;
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    max-height: 180px;
+    padding: 15px 15px 15px 0;
+    font-size: 0.95rem;
+    background-color: #f9f9f9;
+}
+.chat-input button {
+    visibility: hidden;
+}
+.chat-input textarea:valid ~ button {
+    visibility: visible;
+}
+.cliente {
+    list-style-type: none;
+    margin-bottom: 10px;
+    text-align: left;
+    max-width: 70%;
+    background-color: #eea74a;
+    border-radius: 10px;
+    padding: 10px;
+    float:right;
+    clear: both;
+    word-wrap: break-word;
+}
+
+.servidor{
+    list-style-type: none; 
+    margin-bottom: 10px; 
+    text-align: left; 
+    max-width: 70%; 
+    background-color: #e0e0e0; 
+    border-radius: 10px; 
+    padding: 10px; 
+    clear: both;
+    word-wrap: break-word;
+}
+
+.puntos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 100px;
+  }
+  
+.punto {
+    width: 7px;
+    height: 7px;
+    background-color: #333;
+    border-radius: 50%;
+    margin: 0 6px;
+    animation: punto-animation 1.5s infinite ease-in-out;
+}
+  
+.punto:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .punto:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes punto-animation {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @media screen and (max-height: 600px) {
+    .chat-container {
+        height: 20vh; /* Reducir la altura del contenedor al 40% de la altura de la ventana */
+    }
+
+    .config-chat {
+        height: 40vh; /* Reducir la altura del contenedor al 40% de la altura de la ventana */
+    }
+  }
+
+.send-button{
+    border: none;
+    background-color: #f9f9f9;
+}
+.send-button img{
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    color: orange;
+}

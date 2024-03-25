@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chatbot Models</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+    <% if (nombre) { %>
+        <%-include('partials/navigation_logout') %>
+        <div class="grid">
+            <%-include('partials/config_chat') %>
+            <div class="lineusingborder"></div>
+            <%-include('partials/chat') %>
+        </div>
+    <% } else {
+    %>
+        <%-include('partials/navigation')%>
+    <% } %>
+    
+</body>
+</html>

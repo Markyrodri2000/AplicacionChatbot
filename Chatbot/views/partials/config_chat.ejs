@@ -1,0 +1,170 @@
+<style>
+    .configuracion{
+        display: grid;
+        grid-template-rows: 50% 50%;
+    }
+    .config-chat {
+        padding: 10px;
+        max-height: 300px;
+        max-width: 750px;
+        overflow-y: auto;
+        overflow-x: auto;
+        height: auto;
+        border-radius: 20px;
+        margin-top: 50px;
+        margin-left: 5%;
+        margin-bottom: 0px;
+        background-color: #d3b378;
+        display: grid;
+        grid-template-columns: 55% 35%;
+        border: 1px solid black;
+        border-radius: 8px;
+        gap:40px;
+    }
+
+    form {
+        margin-bottom: 30px;
+    }
+
+    button {
+        background-color: #ffa6003a;
+        color: black;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: 'Overpass', sans-serif;
+        margin-top: 5px;
+    }
+
+    .widget,
+    .guardar {
+        width: 150px;
+        height: 50px;
+        background-color: orange;
+        color: black;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .entregar,
+    .guardar_desp {
+        z-index: 1;
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .entregar_codigo{
+        display:none;
+    }
+
+    .entregar textarea{
+        width: 630px; 
+        height: 47px;
+        margin-bottom: 10px;
+    }
+    .cerrar{
+        float: right;
+        background-color: #f0f0f0;
+        border: none;
+    }
+    .cerrar img{
+        width: 20px;
+        height: 20px;
+        float:right;
+        margin-left: 10px;
+    }
+    .entregar button,
+    .guardar_desp button {
+        margin-top: 10px;
+    }
+    .api_key_validar{
+        width: 300px;
+        height: 30px;
+        margin-bottom: 20px;
+    }
+    form .descripcion{
+        width: 400px; 
+        height: 50px;
+    }
+    .link{
+        width: 400px;
+        height: 20px;
+    }
+    #config-train{
+        margin-bottom: 30px;
+        max-width: 450px;
+        
+    }
+    .train{
+        width: 400px;
+    }
+    @media (max-width: 768px) {
+        .config-chat{
+            margin-left: 10px;
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+        }
+        .controlar-widget{
+            grid-column: span 2;
+        }
+    }
+</style>
+<script src="../script/cambiar_estilos.js" defer></script>
+
+<div class="configuracion">
+    <div class="config-chat">
+        <div class="formulario1">
+            <form>
+                <label>Titulo para tu ChatBot: <input class="tit" type="text" placeholder="ChatBot"></label><br>
+                <label>Nombre de tu ChatBot: <input class="nombre_chat" type="text" placeholder="Alexa"></label><br>
+                <label>Color del fondo: <input class="color-fondo" type="color" id="colorpicker" value="#d3b378"></label><br>
+                <label>Color nav: <input class="color-nav" type="color" id="colorpicker" value="#ffa500"></label><br>
+                <label>Color mensajes servidor: <input class="color-servidor" type="color" id="colorpicker" value="#e0e0e0"></label><br>
+                <label>Color mensajes cliente: <input class="color-cliente" type="color" id="colorpicker" value="#eea74a"></label><br>
+                <label>Color fuente: <input class="color-fuente" type="color" id="colorpicker" value="#000000"></label><br>
+            </form>
+
+            <button class="send-style">Aplicar cambios</button>
+            <button class="restablecer-style">Restablecer</button>
+        </div>
+        <div class="controlar-widget">
+            <button class="widget">Descargar Widget</button>
+            <button class="guardar">Guardar chat</button>
+        </div>
+        <span class="entregar">
+            <button class="cerrar"><img src="../img/close.png"></button>
+            <h3 class="titulo_api">API KEY</h3>
+            <input class="api_key_validar" type="text" placeholder=""><br>
+            <p class="error_key"></p>
+            <button class="validar_key">Validar</button>
+            <span class="entregar_codigo">
+                <h3>Widget Chat</h3>
+                <textarea></textarea>
+                <button class="copiar">Copiar</button>
+            </span>
+            
+        </span>
+        <span class="guardar_desp">
+            <p>Widget guardado</p>
+            <button class="cerrar-guardar">Cerrar</button>
+            <a href="chats"><button class="mis-chats">Mis chats</button></a>
+        </span>
+    </div>
+    <div class="config-chat" id="config-train">
+        <div class="formulario1">
+            <form>
+                <label>Descripción:</label><br>
+                <textarea class="descripcion"></textarea><br><br>
+                <label>Link web:<br><input class="link" type="text" placeholder="https://www.zara.com/es/"></label><br>
+            </form>
+            <button class="train">Entrenar</button>
+        </div>
+    </div>
+</div>

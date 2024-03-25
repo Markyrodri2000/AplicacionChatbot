@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8">
+        
+        <title>Cuenta</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/estilos.css">
+        <script>
+            var tokens = '<%- JSON.stringify(tokens) %>'
+            const error = "<%=error%>"
+        </script>
+        <script src="./script/cuenta.js" defer></script>
+    </head>
+<body>
+    <%- include('partials/navigation_logout') %>
+    <div id="contenedor">
+        <div id="central">
+            <div id="login">
+                <div class="titulo">
+                    Mi cuenta
+                </div>
+                <div id="loginform">
+                    <input type="text" name="Nombre" value="<%=nombre%>" readonly>
+                    <input type="email" name="email" value="<%=email%>" readonly>
+                    <input type="password" name="password" value="<%=password%>" readonly>
+                    <button class="cambiar">Cambiar contraseña</button>
+                    <form action="tokens" method="POST">
+                        <button class="api">API key</button>
+                    </form>
+                    <span class="cambiar_psw">
+                        <form id="Contraseña" action="cambiar_password" method="POST">
+                            <h3>Cambiar Contraseña</h3>
+                            <input type="password" name="anterior_pssw" placeholder="Contraseña anterior" required>
+                            <input type="password" name="new_pssw" placeholder="Nueva contraseña" required>
+                            <input type="password" name="conf_new_pssw" placeholder="Confirmar nueva contraseña" required>
+                            <p class="mensajes"></p>
+                            <button class="confirmar">Confirmar</button>
+                        </form>
+                        <form action="cerrar" method="POST">
+                            <button class="cerrar">Cerrar</button>
+                        </form>
+                    </span>
+                    <span class="generate_token">
+                        <form id="Token" action = "generar_token" method="POST">
+                            <h3>API TOKENS</h3>
+                            <div class="mensajes_tokens">
+                            </div>
+                            <h3>Crear token</h3>
+                            <input type="text" name="token" placeholder="Nombre token" required>
+                            <button class="crear_token">Crear token</button>
+                        </form>
+                        <form action="cerrar" method="POST">
+                            <button class="cerrar_token">Cerrar</button>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- Define que el documento esta bajo el estandar de HTML 5 -->
+<!doctype html>
+
+<!-- Representa la raíz de un documento HTML o XHTML. Todos los demás elementos deben ser descendientes de este elemento. -->
+<html lang="es">
+    
+    <head>
+        
+        <meta charset="utf-8">
+        
+        <title>Login</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/estilos.css">
+    </head>
+    
+    <body>
+        <%- include('partials/navigation') %>
+        <div id="contenedor">
+            <div id="central">
+                <div id="login">
+                    <div class="titulo">
+                        Login
+                    </div>
+                    <form id="loginform" method="POST">
+                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="password" name="password" placeholder="Password" required>
+                        <button type="submit">Login</button>
+                        
+                        <% if (error) { %>
+                            <p><%=error%></p>
+                        <% } else {
+                        %>
+                            <p></p>
+                        <% } %>
+                        
+                        
+                    </form>
+                    <div class="pie-form">
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <a href="registro">¿No tienes Cuenta? Registrate</a>
+                    </div>
+                </div>
+                <div class="inferior">
+                    <a href="/">Home</a>
+                </div>
+            </div>
+        </div>
+            
+    </body>
+</html>

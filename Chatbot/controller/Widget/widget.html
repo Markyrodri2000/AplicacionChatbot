@@ -1,0 +1,287 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass&display=swap">
+<style>
+    .chatbot{
+        font-family: 'Overpass', sans-serif;
+        position: fixed;
+        right: 35px;
+        bottom: 110px;
+        width: 400px;
+        height: auto;
+        opacity:0;
+        border-radius: 15px;
+        display:grid;
+        z-index: 9999;
+        transition: opacity 0.5s ease-in-out;
+    }
+    #primero{
+        display: none;
+    }
+    .chat-messages-grid{
+        height: 300px;
+        overflow-y: auto;
+    }
+    .abrir_cerrar_widget{
+        position: fixed;
+        right: 35px;
+        bottom: 50px;
+        background-color: rgba(238, 186, 96, 0.89);
+        border-radius: 50%;
+        border: none;
+        align-items: center;
+        padding: 13px;
+    }
+    .chat-input {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ccc;
+    }
+    .chat-input button {
+        visibility: hidden;
+    }
+    .chat-input textarea:valid ~ button {
+        visibility: visible;
+    }
+    .chat-input textarea {
+        height: 50px;
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: none;
+        max-height: 180px;
+        padding: 15px 15px 15px 0;
+        font-size: 0.95rem;
+        background-color: #f9f9f9;
+    }
+    .cliente {
+        list-style-type: none;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        text-align: left;
+        max-width: 70%;
+        background-color: #eea74a;
+        border-radius: 10px;
+        padding: 10px;
+        float:right;
+        clear: both;
+        word-wrap: break-word;
+    }
+
+    .servidor{
+        list-style-type: none; 
+        margin-bottom: 10px; 
+        text-align: left;
+        margin-left: -25px;
+        max-width: 70%; 
+        background-color: #e0e0e0; 
+        border-radius: 10px; 
+        padding: 10px; 
+        clear: both;
+        word-wrap: break-word;
+    }
+
+    .chat-header {
+        background-color: #ffa500;
+        color: #000000;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .puntos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 100px;
+    }
+    
+    .punto {
+        width: 7px;
+        height: 7px;
+        background-color: #333;
+        border-radius: 50%;
+        margin: 0 6px;
+        animation: punto-animation 1.5s infinite ease-in-out;
+    }
+    
+    .punto:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .punto:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes punto-animation {
+        0%, 100% {
+        transform: translateY(0);
+        }
+        50% {
+        transform: translateY(-10px);
+        }
+    }
+    .abrir_cerrar_widget img{
+        width: 30px;
+        height: 30px;
+    }
+    .send-button{
+        border: none;
+        background-color: #f9f9f9;
+    }
+    .send-button img{
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        color: orange;
+    }
+
+
+
+</style>
+
+<div class="widgetContainer">
+    <button id= "abrir" class="abrir_cerrar_widget"><img src="http://localhost:3000/widget/comment.png"></button>
+    <div class="chatbot">
+        <div class="chat-header-grid">
+            <header class="chat-header">
+                <h2>OPEN AI</h2>
+            </header>
+        </div>
+        <div class="chat-messages-grid">
+            <ul class="chat-messages">
+                <li class="servidor"><p>Bienvenido/a, soy <text>Nistrica</text> tu asistente virtual, ¿en que puedo ayudarte?</p></li>
+                <li id="primero" class="cliente"><p>Hola, encantado/a de conocerte, yo soy Marc</p></li>
+            </ul>
+        </div>
+        <div class="chat-input">
+            <textarea placeholder="Introduce tu mensaje..." spellcheck="false" required></textarea>
+            <button class="send-button"><img src="http://localhost:3000/widget/send.png"></button>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    const actual = document.querySelector(".chat-header h2")
+    const nombre = document.querySelector(".chat-messages li text")
+    const chat = document.querySelector(".chat-messages-grid")
+    const header = document.querySelector(".chat-header")
+    const serv = document.querySelector(".chat-messages .servidor")
+    const cli = document.querySelector(".chat-messages .cliente")
+
+    actual.innerHTML = 'ChatBot'
+    nombre.innerHTML = 'Alexa'
+    chat.style.backgroundColor = '#d3b378'
+    header.style.backgroundColor = '#ffa500'
+    serv.style.backgroundColor = '#e0e0e0'
+    cli.style.backgroundColor = '#eea74a'
+    chat.style.color = '#000000'
+    header.style.color = '#000000'
+
+    const chatbot = document.querySelector(".chatbot")
+    const abrir = document.querySelector(".abrir_cerrar_widget")
+    const imagen = document.querySelector(".abrir_cerrar_widget img")
+    abrir.addEventListener('click',() => {
+        if(abrir.id == "abrir"){
+            chatbot.style.opacity = 1
+            imagen.src = "http://localhost:3000/widget/close.png"
+            abrir.id = "cerrar"
+        }
+        else{
+            if(abrir.id == "cerrar"){
+                chatbot.style.opacity = 0
+                imagen.src = "http://localhost:3000/widget/comment.png"
+                abrir.id = "abrir"
+            }
+        }
+    })
+</script>
+<script>
+    const mensajes_grid = document.querySelector(".chat-messages-grid")
+    const mensajes = document.querySelector(".chat-messages")
+    const input = document.querySelector(".chat-input textarea")
+    const boton = document.querySelector(".send-button")
+    const col_clien = document.querySelector(".cliente").style.backgroundColor
+    const col_serv = document.querySelector(".servidor").style.backgroundColor
+    const text = document.querySelector(".chat-input textarea")
+
+    function crear_mensaje(mensaje){
+        const persona = mensaje[0]
+        const mes = mensaje[1]
+        const imagen = ''
+        const chatLi = document.createElement("li")
+        if (persona == "cliente"){
+            chatLi.classList.add("cliente")
+            const col_clien = document.querySelector(".cliente").style.backgroundColor
+            chatLi.style.backgroundColor = col_clien
+        }
+        if(persona == "servidor"){
+            chatLi.classList.add("servidor")
+            const col_serv = document.querySelector(".servidor").style.backgroundColor
+            chatLi.style.backgroundColor = col_serv
+        }
+        let chatContent =  `<p></p>`
+        chatLi.innerHTML = chatContent
+        chatLi.querySelector("p").textContent = mes
+        return chatLi
+    }
+
+    function responder(mis){
+        const chatLi = document.createElement("li")
+        chatLi.classList.add("servidor")
+        chatLi.innerHTML = `
+            <div class="puntos">
+                <div class="punto"></div>
+                <div class="punto"></div>
+                <div class="punto"></div>
+            </div>
+        `
+        mensajes.appendChild(chatLi)
+        mensajes_grid.scrollTo(0, mensajes.scrollHeight)
+        fetch("http://localhost:8000/",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {mensaje: mis}
+            )
+        })
+        .then(response => response.json())
+        .then(data => {
+            let chatContent =  `<p>${data.mensaje}</p>`
+            chatLi.innerHTML = chatContent
+            mensajes_grid.scrollTo(0, mensajes.scrollHeight)
+            //añadir_mensaje(["servidor",data.mensaje])
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error)
+        });
+
+    }
+    function añadir_mensaje(mes) {
+        const mis = mes
+        input.value = ""
+        if (!mis) return
+        mensajes.appendChild(crear_mensaje(mis))
+    }
+
+    boton.addEventListener('click', () => {
+        const mensaje = input.value
+        añadir_mensaje(["cliente",input.value])
+        responder(mensaje)
+    })
+
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault()
+            if(input.value != ""){
+                const mensaje = input.value
+                añadir_mensaje(["cliente",input.value])
+                responder(mensaje)
+            }
+        }
+    });
+</script>
