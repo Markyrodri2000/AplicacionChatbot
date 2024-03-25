@@ -38,7 +38,7 @@ function responder(mis){
     `
     mensajes.appendChild(chatLi)
     mensajes.scrollTo(0, mensajes.scrollHeight)
-    fetch("http://localhost:8000/",{
+    fetch("http://app:8000/",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

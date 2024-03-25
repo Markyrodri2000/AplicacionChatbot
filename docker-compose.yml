@@ -29,15 +29,17 @@ services:
     command: npm run dev
   api:
     build:
-      dockerfile: ./API-Modelos/venv/Dockerfile
+      context: .
+      dockerfile: ./API-Modelos/Dockerfile
+    image: api
     depends_on:
       - db
       - app
     links:
       - db
       - app
+    container_name: api
     ports:
-      - 8000:5000
+      - 8000:8000
     volumes:
-      - ./API-Modelos/:api
-    
+      - ./API-Modelos/:/api
