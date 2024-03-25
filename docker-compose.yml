@@ -27,3 +27,17 @@ services:
       - ./Chatbot/:/app_chatbot
       - /app_chatbot/node_modules
     command: npm run dev
+  api:
+    build:
+      dockerfile: ./API-Modelos/venv/Dockerfile
+    depends_on:
+      - db
+      - app
+    links:
+      - db
+      - app
+    ports:
+      - 8000:5000
+    volumes:
+      - ./API-Modelos/:api
+    
