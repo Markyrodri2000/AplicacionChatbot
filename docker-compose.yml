@@ -10,11 +10,11 @@ services:
       ports:
       - 3006:3006
       volumes:
-        - ./backup/Nistrica.sql:/docker-entrypoint-initdb.d/init.sql
+        - ./Chatbot/backup/Nistrica.sql:/docker-entrypoint-initdb.d/init.sql
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Chatbot/Dockerfile
     image: chatbot
     depends_on:
       - db
@@ -24,6 +24,6 @@ services:
     ports: 
       - 3000:3000
     volumes:
-      - .:/app_chatbot
+      - ./Chatbot/:/app_chatbot
       - /app_chatbot/node_modules
     command: npm run dev
