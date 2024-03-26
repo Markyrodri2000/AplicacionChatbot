@@ -1,3 +1,7 @@
 Flask
 requests
 flask_cors
+accelerate
+transformers
+langchain
+

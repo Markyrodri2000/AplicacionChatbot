@@ -16,9 +16,8 @@ def post_data():
         """question = datos['mensaje']
         response = modelo.run(question)
         print(response)
-        print(datos['mensaje'])
-        response = responder(datos['mensaje'])"""
-        response = datos['mensaje']
+        print(datos['mensaje'])"""
+        response = responder(datos['mensaje'])
         data = response
     
     return jsonify({"mensaje": data})
