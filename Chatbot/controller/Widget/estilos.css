@@ -1,11 +1,26 @@
 #widget{
     font-family: 'Overpass', sans-serif;
     position: fixed;
-    right: 20px;
-    bottom: 5px;
-    width: 100%;
-    height: 100%;
-    opacity:1;
+    right: 40px;
+    bottom: 90px;
+    width: 410px;
+    display: none;
+    height: 470px;
     border: none;
     z-index: 999;
+}
+
+.abrir_cerrar_widget{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: rgba(238, 186, 96, 0.89);
+    border-radius: 50%;
+    border: none;
+    align-items: center;
+    padding: 13px;
+}
+.abrir_cerrar_widget img{
+    width: 30px;
+    height: 30px;
 }

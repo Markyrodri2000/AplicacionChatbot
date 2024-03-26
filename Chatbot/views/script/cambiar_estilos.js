@@ -104,7 +104,7 @@ restablecer.addEventListener('click', () => {
     console.log("Hola")
 })
 probar.addEventListener('click', () => {
-    const indice = document.querySelector(".grid")
+    const indice = document.querySelector("body")
     if(probar.textContent == "Probar Widget"){
         fetch("http://localhost:3000/widget",{
             method: 'POST',
@@ -192,11 +192,13 @@ function descargar_widget(){
     ).then(data=>{
         const codigo = document.createElement("code")
         const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
+        const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
+        const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
         const cierre = "</iframe>"
         codigo.textContent = link
         const lin = document.querySelector(".entregar_codigo textarea")
-        lin.value = link + "\n" + link2 + cierre
+        lin.value = link + "\n" + boton + "\n" + script + "\n" + link2 + cierre
         descargar.style.display = "block"
         copiar.addEventListener('click', () => {
             lin.select()

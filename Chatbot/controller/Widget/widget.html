@@ -3,11 +3,7 @@
     .chatbot{
         font-family: 'Overpass', sans-serif;
         position: fixed;
-        right: 35px;
-        bottom: 110px;
-        width: 400px;
-        height: auto;
-        opacity:0;
+        align-self: center;
         border-radius: 15px;
         display:grid;
         z-index: 9999;
@@ -19,16 +15,6 @@
     .chat-messages-grid{
         height: 300px;
         overflow-y: auto;
-    }
-    .abrir_cerrar_widget{
-        position: fixed;
-        right: 35px;
-        bottom: 50px;
-        background-color: rgba(238, 186, 96, 0.89);
-        border-radius: 50%;
-        border: none;
-        align-items: center;
-        padding: 13px;
     }
     .chat-input {
         display: flex;
@@ -122,10 +108,6 @@
         transform: translateY(-10px);
         }
     }
-    .abrir_cerrar_widget img{
-        width: 30px;
-        height: 30px;
-    }
     .send-button{
         border: none;
         background-color: #f9f9f9;
@@ -136,13 +118,7 @@
         background-color: white;
         color: orange;
     }
-
-
-
 </style>
-
-<div class="widgetContainer">
-    <button id= "abrir" class="abrir_cerrar_widget"><img src="http://localhost:3000/widget/comment.png"></button>
     <div class="chatbot">
         <div class="chat-header-grid">
             <header class="chat-header">
@@ -161,7 +137,6 @@
         </div>
         
     </div>
-</div>
 
 <script>
     const actual = document.querySelector(".chat-header h2")
@@ -179,24 +154,6 @@
     cli.style.backgroundColor = '#eea74a'
     chat.style.color = '#000000'
     header.style.color = '#000000'
-
-    const chatbot = document.querySelector(".chatbot")
-    const abrir = document.querySelector(".abrir_cerrar_widget")
-    const imagen = document.querySelector(".abrir_cerrar_widget img")
-    abrir.addEventListener('click',() => {
-        if(abrir.id == "abrir"){
-            chatbot.style.opacity = 1
-            imagen.src = "http://localhost:3000/widget/close.png"
-            abrir.id = "cerrar"
-        }
-        else{
-            if(abrir.id == "cerrar"){
-                chatbot.style.opacity = 0
-                imagen.src = "http://localhost:3000/widget/comment.png"
-                abrir.id = "abrir"
-            }
-        }
-    })
 </script>
 <script>
     const mensajes_grid = document.querySelector(".chat-messages-grid")

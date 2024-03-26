@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="/css/estilos.css" />
 </head>
 <body>
+    <link rel=stylesheet href=http://localhost:3000/widget/estilos.css>
+<button id="abrir" class="abrir_cerrar_widget"><img src=http://localhost:3000/widget/comment.png></button>
+<script src=http://localhost:3000/widget/widget.js defer></script>
+<iframe id=widget src=http://localhost:3000/widget/crear/Marc/3487461700.html></iframe>
     <% if (nombre) { %>
         <%-include('partials/navigation_logout') %>
         <div class="grid">
@@ -19,7 +23,6 @@
     <% } else {
     %>
         <%-include('partials/navigation')%>
-    <% } %>
-    
+    <% } %>   
 </body>
 </html>
