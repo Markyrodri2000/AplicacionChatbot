@@ -13,6 +13,7 @@ const guardar_desp = document.querySelector(".guardar_desp")
 const cerrar_guardar = document.querySelector(".cerrar-guardar")
 const mis_chats = document.querySelector(".mis-chats")
 const entrenar = document.querySelector(".train")
+const probar = document.querySelector(".probar")
 
 const input_titulo = document.querySelector(".tit")
 const input_nombre = document.querySelector(".nombre_chat")
@@ -100,6 +101,46 @@ restablecer.addEventListener('click', () => {
     chat.style.color = "#000000"
     header.style.color = "#000000"
     color_fuente.value = "#000000"
+    console.log("Hola")
+})
+probar.addEventListener('click', () => {
+    const indice = document.querySelector(".grid")
+    if(probar.textContent == "Probar Widget"){
+        fetch("http://localhost:3000/widget",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                titulo: document.querySelector(".chat-header h2").textContent,
+                nombre: chat.querySelector("li text").textContent,
+                color_fondo: color_fondo.value,
+                color_nav: color_nav.value,
+                color_servidor: color_servidor.value,
+                color_cliente: color_cliente.value,
+                color_fuente: color_fuente.value
+            })
+        }).then(
+            response => response.json()
+        ).then(data=>{
+            const link_code = document.createElement("link")
+            link_code.id="iframe_style"
+            link_code.rel = "stylesheet"
+            link_code.href = "http://localhost:3000" + data.link_estilos
+            const frame = document.createElement("iframe")
+            frame.id = "widget"
+            frame.src = "http://localhost:3000" + data.link_iframe
+            indice.appendChild(link_code)
+            indice.appendChild(frame)
+        })
+    }
+    else{
+        const estilos = document.querySelector("link #iframe_style")
+        const frame = document.querySelector("iframe #widget")
+        indice.remove(estilos)
+        indice.remove(frame)
+        probar.textContent = "Probar Widget"
+    }
 })
 abrir_descargar.addEventListener('click', () => {
     entregar.style.display = "block" 
