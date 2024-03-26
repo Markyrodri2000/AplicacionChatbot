@@ -190,15 +190,17 @@ function descargar_widget(){
     }).then(
         response => response.json()
     ).then(data=>{
+        console.log(data.link)
+        const scp = "<script src=http://localhost:3000"+data.link+" defer></script>"
         const codigo = document.createElement("code")
-        const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
+        /*const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
         const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
         const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
-        const cierre = "</iframe>"
-        codigo.textContent = link
+        const cierre = "</iframe>"*/
+        codigo.textContent = scp
         const lin = document.querySelector(".entregar_codigo textarea")
-        lin.value = link + "\n" + boton + "\n" + script + "\n" + link2 + cierre
+        lin.value = scp
         descargar.style.display = "block"
         copiar.addEventListener('click', () => {
             lin.select()

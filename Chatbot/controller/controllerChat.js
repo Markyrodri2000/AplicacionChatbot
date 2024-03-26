@@ -66,10 +66,23 @@ function Widget(req,res){
         res.send(iframe)
     })
     const cambio_estilos = actualizar_valores_widget(req.body)
+    var script = `
+        var añadir = \`
+            <link rel=stylesheet href=http://localhost:3000/widget/estilos.css>
+            <button id="abrir" class="abrir_cerrar_widget"><img src=http://localhost:3000/widget/comment.png></button>
+            <script src=http://localhost:3000/widget/widget.js defer></script>
+            <iframe id="widget" src=http://localhost:3000`+link+`></iframe>
+        \`
+        document.body.innerHTML = añadir + document.body.outerHTML
+    `
+    const rand = crypto.getRandomValues(new Uint32Array(1))
+    const link_def = '/widget/'+req.session.nombre+'/'+ rand + '.js'
+    router.get(link_def, (req, res) => {
+        res.setHeader('Content-Type', 'text/javascript')
+        res.send(script)
+    })
     res.send(JSON.stringify({
-        link_iframe: link,
-        link_estilos: '/widget/estilos.css',
-        link_script: '/widget/widget.js'
+        link: link_def,
     }))
 }
 function actualizar_valores_widget(body){
