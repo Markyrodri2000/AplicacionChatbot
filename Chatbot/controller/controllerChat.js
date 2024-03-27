@@ -41,8 +41,8 @@ function desplegar_css(req,res){
         res.send(cerrar)
     })
 
-    const enviar = fs.readFileSync('./controller/Widget/img/send.png')
-    const link_img3 = '/widget/send.png'
+    const enviar = fs.readFileSync('./controller/Widget/img/enviar.png')
+    const link_img3 = '/widget/enviar.png'
     router.get(link_img3, (req, res) => {
         res.setHeader('Content-Type', 'image/png')
         res.send(enviar)

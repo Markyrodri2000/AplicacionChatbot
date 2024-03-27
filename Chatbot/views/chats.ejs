@@ -13,10 +13,24 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/estilos.css">
+        <link rel="stylesheet" href="css/mis_chats.css">
     </head>
 <body>
     <%- include('partials/navigation_logout') %>
-    <p>Hola <%=nombre%></p>
+    <div id="contenedor">
+        <div id="central">
+            <div id="MisChats">
+                <div class="titulo">
+                    Mis Chats
+                </div>
+                <form id="loginform" method="POST">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>
