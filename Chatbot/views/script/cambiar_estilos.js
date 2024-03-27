@@ -101,10 +101,13 @@ restablecer.addEventListener('click', () => {
     chat.style.color = "#000000"
     header.style.color = "#000000"
     color_fuente.value = "#000000"
-    console.log("Hola")
 })
 probar.addEventListener('click', () => {
     const indice = document.querySelector("body")
+    var link_code = ""
+    var frame = ""
+    var boton = ""
+    var scr = ""
     if(probar.textContent == "Probar Widget"){
         fetch("http://localhost:3000/widget",{
             method: 'POST',
@@ -123,22 +126,49 @@ probar.addEventListener('click', () => {
         }).then(
             response => response.json()
         ).then(data=>{
-            const link_code = document.createElement("link")
+            link_code = document.createElement("link")
             link_code.id="iframe_style"
             link_code.rel = "stylesheet"
             link_code.href = "http://localhost:3000" + data.link_estilos
-            const frame = document.createElement("iframe")
+
+            frame = document.createElement("iframe")
             frame.id = "widget"
             frame.src = "http://localhost:3000" + data.link_iframe
+
+            boton = document.createElement("button")
+            boton.id = "abrir"
+            boton.className = "abrir_cerrar_widget"
+
+            const imagen = document.createElement("img")
+            imagen.src = "http://localhost:3000/widget/comment.png"
+
+            boton.appendChild(imagen)
+
+            scr = document.createElement("script")
+            scr.id = "widget_script"
+            scr.src = "http://localhost:3000"+data.link_script
+            scr.defer
+
             indice.appendChild(link_code)
+            indice.appendChild(boton)
             indice.appendChild(frame)
+            indice.appendChild(scr)
+            probar.textContent = "Deshabilitar Widget"
         })
     }
     else{
         const estilos = document.querySelector("link #iframe_style")
-        const frame = document.querySelector("iframe #widget")
-        indice.remove(estilos)
+        /*const frame = document.querySelector("iframe #widget")
+        const boton = document.querySelector("button .abrir_cerrar_widget")
+        const scr = document.querySelector("script #widget_script")*/
+        console.log(link_code)
+        console.log(frame)
+        console.log(boton)
+        console.log(scr)
+        /*indice.remove(estilos)
         indice.remove(frame)
+        indice.remove(boton)
+        indice.remove(scr)*/
         probar.textContent = "Probar Widget"
     }
 })
@@ -190,17 +220,14 @@ function descargar_widget(){
     }).then(
         response => response.json()
     ).then(data=>{
-        console.log(data.link)
-        const scp = "<script src=http://localhost:3000"+data.link+" defer></script>"
-        const codigo = document.createElement("code")
-        /*const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
+        const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
         const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
         const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
-        const cierre = "</iframe>"*/
-        codigo.textContent = scp
+        const cierre = "</iframe>"
+
         const lin = document.querySelector(".entregar_codigo textarea")
-        lin.value = scp
+        lin.value = link + "\n" + boton + "\n" + script + "\n" + link2 + "\n" + cierre
         descargar.style.display = "block"
         copiar.addEventListener('click', () => {
             lin.select()

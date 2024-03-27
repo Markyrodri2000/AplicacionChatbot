@@ -65,24 +65,27 @@ function Widget(req,res){
         res.setHeader('Content-Type', 'text/html')
         res.send(iframe)
     })
-    const cambio_estilos = actualizar_valores_widget(req.body)
+    /*const cambio_estilos = actualizar_valores_widget(req.body)
+    const javascript = fs.readFileSync('./controller/Widget/widget.js','utf-8')
     var script = `
-        var añadir = \`
-            <link rel=stylesheet href=http://localhost:3000/widget/estilos.css>
-            <button id="abrir" class="abrir_cerrar_widget"><img src=http://localhost:3000/widget/comment.png></button>
-            <script src=http://localhost:3000/widget/widget.js defer></script>
-            <iframe id="widget" src=http://localhost:3000`+link+`></iframe>
-        \`
-        document.body.innerHTML = añadir + document.body.outerHTML
+    var añadir = \`
+        <link rel=stylesheet href=http://localhost:3000/widget/estilos.css>
+        <button id="abrir" class="abrir_cerrar_widget"><img src=http://localhost:3000/widget/comment.png></button>
+        <iframe id="widget" src=http://localhost:3000`+link+`></iframe>
+    \`
+    document.body.innerHTML = añadir + document.body.outerHTML
+    ${javascript}
     `
     const rand = crypto.getRandomValues(new Uint32Array(1))
     const link_def = '/widget/'+req.session.nombre+'/'+ rand + '.js'
     router.get(link_def, (req, res) => {
         res.setHeader('Content-Type', 'text/javascript')
         res.send(script)
-    })
+    })*/
     res.send(JSON.stringify({
-        link: link_def,
+        link_estilos: '/widget/estilos.css',
+        link_script: '/widget/widget.js',
+        link_iframe: link
     }))
 }
 function actualizar_valores_widget(body){
