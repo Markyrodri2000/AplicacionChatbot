@@ -104,10 +104,6 @@ restablecer.addEventListener('click', () => {
 })
 probar.addEventListener('click', () => {
     const indice = document.querySelector("body")
-    var link_code = ""
-    var frame = ""
-    var boton = ""
-    var scr = ""
     if(probar.textContent == "Probar Widget"){
         fetch("http://localhost:3000/widget",{
             method: 'POST',
@@ -126,16 +122,16 @@ probar.addEventListener('click', () => {
         }).then(
             response => response.json()
         ).then(data=>{
-            link_code = document.createElement("link")
+            const link_code = document.createElement("link")
             link_code.id="iframe_style"
             link_code.rel = "stylesheet"
             link_code.href = "http://localhost:3000" + data.link_estilos
 
-            frame = document.createElement("iframe")
+            const frame = document.createElement("iframe")
             frame.id = "widget"
             frame.src = "http://localhost:3000" + data.link_iframe
 
-            boton = document.createElement("button")
+            const boton = document.createElement("button")
             boton.id = "abrir"
             boton.className = "abrir_cerrar_widget"
 
@@ -144,7 +140,7 @@ probar.addEventListener('click', () => {
 
             boton.appendChild(imagen)
 
-            scr = document.createElement("script")
+            const scr = document.createElement("script")
             scr.id = "widget_script"
             scr.src = "http://localhost:3000"+data.link_script
             scr.defer
@@ -157,18 +153,19 @@ probar.addEventListener('click', () => {
         })
     }
     else{
-        const estilos = document.querySelector("link #iframe_style")
-        /*const frame = document.querySelector("iframe #widget")
-        const boton = document.querySelector("button .abrir_cerrar_widget")
-        const scr = document.querySelector("script #widget_script")*/
-        console.log(link_code)
+        const estilos = document.querySelector("#iframe_style")
+        const frame = document.querySelector("#widget")
+        const boton = document.querySelector(".abrir_cerrar_widget")
+        const scr = document.querySelector("#widget_script")
+        console.log(estilos)
         console.log(frame)
         console.log(boton)
         console.log(scr)
-        /*indice.remove(estilos)
-        indice.remove(frame)
-        indice.remove(boton)
-        indice.remove(scr)*/
+        console.log(indice)
+        estilos.remove()
+        frame.remove()
+        boton.remove()
+        scr.remove()
         probar.textContent = "Probar Widget"
     }
 })
@@ -220,11 +217,11 @@ function descargar_widget(){
     }).then(
         response => response.json()
     ).then(data=>{
-        const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
+        /*const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
         const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
         const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
-        const cierre = "</iframe>"
+        const cierre = "</iframe>"*/
 
         const lin = document.querySelector(".entregar_codigo textarea")
         lin.value = link + "\n" + boton + "\n" + script + "\n" + link2 + "\n" + cierre
