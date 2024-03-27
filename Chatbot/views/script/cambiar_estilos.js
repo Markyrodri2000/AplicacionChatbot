@@ -27,43 +27,69 @@ function cambiar(titulo,nombre,color_f,color_n,color_s,color_c,fuente){
     if(titulo!=""){
         const actual = document.querySelector(".chat-header h2")
         actual.innerHTML = titulo
+        const input_titulo = document.querySelector(".tit")
         input_titulo.value = ""
         input_titulo.placeholder = titulo
     }
 
     if(nombre!=""){
+        const chat = document.querySelector(".chat-messages")
         const actual = chat.querySelector("li text")
         actual.innerHTML = nombre
+        const input_nombre = document.querySelector(".nombre_chat")
         input_nombre.value = ""
         input_nombre.placeholder = nombre
     }
     if(color_f !="#DB930B"){
+        const chat = document.querySelector(".chat-messages")
         chat.style.backgroundColor = color_f
+        const color_fondo = document.querySelector(".formulario1 .color-fondo")
+        color_fondo.value = color_f
     }
     if(color_n !="#ffa500"){
+        const header = document.querySelector(".chat-header")
         header.style.backgroundColor = color_n
+        const color_nav = document.querySelector(".color-nav")
+        color_nav.value = color_n
     }
     if(color_s !="#e0e0e0"){
         const serv = document.querySelectorAll(".servidor")
         serv.forEach(s => {
             s.style.backgroundColor = color_s
         })
+        const color_servidor = document.querySelector(".color-servidor")
+        color_servidor.value = color_s
     }
     if(color_c !="#eea74a"){
         const cli = document.querySelectorAll(".cliente")
         cli.forEach(c => {
             c.style.backgroundColor = color_c
         })
+        const color_cliente = document.querySelector(".color-cliente")
+        color_cliente.value = color_c
     }
     if(fuente !="#000000"){
+        const chat = document.querySelector(".chat-messages")
+        const header = document.querySelector(".chat-header")
         chat.style.color = fuente
         header.style.color = fuente
+        const color_fuente = document.querySelector(".color-fuente")
+        color_fuente.value = fuente
     }
 
 }
-aplicar.addEventListener('click', () => {
+function cod_aplicar(){
     cambiar(input_titulo.value,input_nombre.value,color_fondo.value,color_nav.value,color_servidor.value,color_cliente.value,color_fuente.value)
     widget_cambiar_dinamicamente()
+    if(sessionStorage.getItem(nombre+"session")=== "activa"){
+        const chat_guardar = document.querySelector(".chat-container").innerHTML
+        const form = document.querySelector(".formulario1")
+        sessionStorage.setItem(nombre,chat_guardar)
+        sessionStorage.setItem(nombre+"form",form.innerHTML)
+    }
+}
+aplicar.addEventListener('click', () => {
+    cod_aplicar()
 })
 
 entrenar.addEventListener('click', () => {
@@ -104,6 +130,12 @@ restablecer.addEventListener('click', () => {
     header.style.color = "#000000"
     color_fuente.value = "#000000"
     widget_cambiar_dinamicamente()
+    if(sessionStorage.getItem(nombre+"session")=== "activa"){
+        const chat_guardar = document.querySelector(".chat-container").innerHTML
+        const form = document.querySelector(".formulario1")
+        sessionStorage.setItem(nombre,chat_guardar)
+        sessionStorage.setItem(nombre+"form",form.innerHTML)
+    }
 })
 function widget_cambiar_dinamicamente(){
     if(probar.textContent == "Deshabilitar Widget"){
@@ -146,6 +178,7 @@ function widget_cambiar_dinamicamente(){
             const boton = document.createElement("button")
             boton.id = "abrir"
             boton.className = "abrir_cerrar_widget"
+            boton.backgroundColor = data.boton_fondo
 
             const imagen = document.createElement("img")
             imagen.src = "http://localhost:3000/widget/comment.png"
@@ -198,6 +231,7 @@ probar.addEventListener('click', () => {
             const boton = document.createElement("button")
             boton.id = "abrir"
             boton.className = "abrir_cerrar_widget"
+            boton.backgroundColor = data.boton_fondo
 
             const imagen = document.createElement("img")
             imagen.src = "http://localhost:3000/widget/comment.png"

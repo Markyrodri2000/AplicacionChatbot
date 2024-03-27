@@ -62,6 +62,8 @@ function Widget(req,res){
     const random = crypto.getRandomValues(new Uint32Array(1))
     const link = '/widget/crear/'+req.session.nombre+'/'+ random + '.html'
     const iframe = actualizar_valores_widget(req.body,iframeTemplate)
+    const bot_fondo = req.body.color_fondo
+
     router.get(link, (req, res) => {
         res.setHeader('Content-Type', 'text/html')
         res.send(iframe)
@@ -86,7 +88,8 @@ function Widget(req,res){
     res.send(JSON.stringify({
         link_estilos: '/widget/estilos.css',
         link_script: '/widget/widget.js',
-        link_iframe: link
+        link_iframe: link,
+        boton_fondo: bot_fondo
     }))
 }
 function actualizar_valores_widget(body,iframeTemplate){
@@ -105,6 +108,7 @@ function actualizar_valores_widget(body,iframeTemplate){
                                  .replace(/color_s_remplazado/g,`'${color_s}'`)
                                  .replace(/color_c_remplazado/g,`'${color_c}'`)
                                  .replace(/fuente_remplazado/g,`'${fuente}'`)
+
     return iframe
 }
 const chat = {
