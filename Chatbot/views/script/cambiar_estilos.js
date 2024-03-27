@@ -59,9 +59,11 @@ function cambiar(titulo,nombre,color_f,color_n,color_s,color_c,fuente){
         chat.style.color = fuente
         header.style.color = fuente
     }
+
 }
 aplicar.addEventListener('click', () => {
     cambiar(input_titulo.value,input_nombre.value,color_fondo.value,color_nav.value,color_servidor.value,color_cliente.value,color_fuente.value)
+    widget_cambiar_dinamicamente()
 })
 
 entrenar.addEventListener('click', () => {
@@ -101,7 +103,69 @@ restablecer.addEventListener('click', () => {
     chat.style.color = "#000000"
     header.style.color = "#000000"
     color_fuente.value = "#000000"
+    widget_cambiar_dinamicamente()
 })
+function widget_cambiar_dinamicamente(){
+    if(probar.textContent == "Deshabilitar Widget"){
+        const indice = document.querySelector("body")
+        const estilos = document.querySelector("#iframe_style")
+        const frame = document.querySelector("#widget")
+        const boton = document.querySelector(".abrir_cerrar_widget")
+        const scr = document.querySelector("#widget_script")
+        estilos.remove()
+        frame.remove()
+        boton.remove()
+        scr.remove()
+    
+        fetch("http://localhost:3000/widget",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                titulo: document.querySelector(".chat-header h2").textContent,
+                nombre: chat.querySelector("li text").textContent,
+                color_fondo: color_fondo.value,
+                color_nav: color_nav.value,
+                color_servidor: color_servidor.value,
+                color_cliente: color_cliente.value,
+                color_fuente: color_fuente.value
+            })
+        }).then(
+            response => response.json()
+        ).then(data=>{
+            const link_code = document.createElement("link")
+            link_code.id="iframe_style"
+            link_code.rel = "stylesheet"
+            link_code.href = "http://localhost:3000" + data.link_estilos
+
+            const frame = document.createElement("iframe")
+            frame.id = "widget"
+            frame.src = "http://localhost:3000" + data.link_iframe
+
+            const boton = document.createElement("button")
+            boton.id = "abrir"
+            boton.className = "abrir_cerrar_widget"
+
+            const imagen = document.createElement("img")
+            imagen.src = "http://localhost:3000/widget/comment.png"
+
+            boton.appendChild(imagen)
+
+            const scr = document.createElement("script")
+            scr.id = "widget_script"
+            scr.src = "http://localhost:3000"+data.link_script
+            scr.defer
+            
+            indice.appendChild(link_code)
+            setTimeout(function(){
+                indice.appendChild(boton)
+                indice.appendChild(frame)
+                indice.appendChild(scr)
+            },10)
+        })
+    }
+}
 probar.addEventListener('click', () => {
     const indice = document.querySelector("body")
     if(probar.textContent == "Probar Widget"){
@@ -146,9 +210,11 @@ probar.addEventListener('click', () => {
             scr.defer
 
             indice.appendChild(link_code)
-            indice.appendChild(boton)
-            indice.appendChild(frame)
-            indice.appendChild(scr)
+            setTimeout(function(){
+                indice.appendChild(boton)
+                indice.appendChild(frame)
+                indice.appendChild(scr)
+            },10)
             probar.textContent = "Deshabilitar Widget"
         })
     }
@@ -157,11 +223,6 @@ probar.addEventListener('click', () => {
         const frame = document.querySelector("#widget")
         const boton = document.querySelector(".abrir_cerrar_widget")
         const scr = document.querySelector("#widget_script")
-        console.log(estilos)
-        console.log(frame)
-        console.log(boton)
-        console.log(scr)
-        console.log(indice)
         estilos.remove()
         frame.remove()
         boton.remove()
@@ -217,11 +278,11 @@ function descargar_widget(){
     }).then(
         response => response.json()
     ).then(data=>{
-        /*const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
+        const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
         const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
         const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
-        const cierre = "</iframe>"*/
+        const cierre = "</iframe>"
 
         const lin = document.querySelector(".entregar_codigo textarea")
         lin.value = link + "\n" + boton + "\n" + script + "\n" + link2 + "\n" + cierre

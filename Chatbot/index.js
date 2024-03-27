@@ -7,6 +7,7 @@ import bodyParser from 'body-parser'
 import mysql from 'mysql2'
 import myconnection from 'express-myconnection'
 import session from 'express-session'
+import cookieParser from 'cookie-parser'
 import db from './bd/config.js'
 
 const app = express()
@@ -15,6 +16,7 @@ const app = express()
 //REQ AND GET
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
+
 //BD
 app.use(myconnection(mysql,db.dbConfig))
 app.use(session(db.sessio))

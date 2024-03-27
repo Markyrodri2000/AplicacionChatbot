@@ -1,6 +1,14 @@
-const chatbot = document.querySelector("#widget")
-const abrir = document.querySelector(".abrir_cerrar_widget")
-const imagen = document.querySelector(".abrir_cerrar_widget img")
+var scriptEjectuado = false
+var chatbot = null
+var abrir = null
+var imagen = null
+
+if(!scriptEjectuado){
+    chatbot = document.querySelector("#widget")
+    abrir = document.querySelector(".abrir_cerrar_widget")
+    imagen = document.querySelector(".abrir_cerrar_widget img")
+    scriptEjectuado = true
+}
 
 abrir.addEventListener('click',() => {
     if(abrir.id == "abrir"){

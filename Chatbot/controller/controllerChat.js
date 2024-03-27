@@ -58,14 +58,15 @@ function Chats(req,res){
 }
 function Widget(req,res){
     //Widget
-    const iframe = fs.readFileSync('./controller/Widget/widget.html','utf-8')
+    const iframeTemplate = fs.readFileSync('./controller/Widget/widget.html','utf-8')
     const random = crypto.getRandomValues(new Uint32Array(1))
     const link = '/widget/crear/'+req.session.nombre+'/'+ random + '.html'
+    const iframe = actualizar_valores_widget(req.body,iframeTemplate)
     router.get(link, (req, res) => {
         res.setHeader('Content-Type', 'text/html')
         res.send(iframe)
     })
-    /*const cambio_estilos = actualizar_valores_widget(req.body)
+    /*
     const javascript = fs.readFileSync('./controller/Widget/widget.js','utf-8')
     var script = `
     var añadir = \`
@@ -88,7 +89,7 @@ function Widget(req,res){
         link_iframe: link
     }))
 }
-function actualizar_valores_widget(body){
+function actualizar_valores_widget(body,iframeTemplate){
     const titulo = body.titulo
     const nombre = body.nombre
     const color_f = body.color_fondo
@@ -97,24 +98,14 @@ function actualizar_valores_widget(body){
     const color_c = body.color_cliente
     const fuente = body.color_fuente
 
-    const estilos = `
-        const actual = document.querySelector(".chat-header h2")
-        const nombre = document.querySelector("li text")
-        const chat = document.querySelector(".chat-messages")
-        const header = document.querySelector(".chat-header")
-        const serv = document.querySelector(".servidor")
-        const cli = document.querySelector(".cliente")
-
-        actual.innerHTML = '${titulo}'
-        nombre.innerHTML = '${nombre}'
-        chat.style.backgroundColor = '${color_f}'
-        header.style.backgroundColor = '${color_n}'
-        serv.style.backgroundColor = '${color_s}'
-        cli.style.backgroundColor = '${color_c}'
-        chat.style.color = '${fuente}'
-        header.style.color = '${fuente}'
-    `
-    return estilos
+    const iframe = iframeTemplate.replace(/titulo_remplazado/g,`'${titulo}'`)
+                                 .replace(/nombre_remplazado/g,`'${nombre}'`)
+                                 .replace(/color_f_remplazado/g,`'${color_f}'`)
+                                 .replace(/color_n_remplazado/g,`'${color_n}'`)
+                                 .replace(/color_s_remplazado/g,`'${color_s}'`)
+                                 .replace(/color_c_remplazado/g,`'${color_c}'`)
+                                 .replace(/fuente_remplazado/g,`'${fuente}'`)
+    return iframe
 }
 const chat = {
     Index,
