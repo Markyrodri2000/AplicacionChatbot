@@ -27,6 +27,7 @@ function crear_mensaje(mensaje){
 }
 
 function responder(mis){
+    const mensajes = document.querySelector(".chat-messages")
     const chatLi = document.createElement("li")
     chatLi.classList.add("servidor")
     chatLi.innerHTML = `
@@ -36,6 +37,9 @@ function responder(mis){
             <div class="punto"></div>
         </div>
     `
+    const col_serv = document.querySelector(".servidor").style.backgroundColor
+    chatLi.style.backgroundColor = col_serv
+    
     mensajes.appendChild(chatLi)
     mensajes.scrollTo(0, mensajes.scrollHeight)
     fetch("http://localhost:8000/",{
@@ -52,6 +56,10 @@ function responder(mis){
         let chatContent =  `<p>${data.mensaje}</p>`
         chatLi.innerHTML = chatContent
         mensajes.scrollTo(0, mensajes.scrollHeight)
+        if(sessionStorage.getItem(nombre+"session")=== "activa"){
+            const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
+            sessionStorage.setItem(nombre,chat_guardar)
+        }
         //añadir_mensaje(["servidor",data.mensaje])
     })
     .catch(error => {
@@ -60,6 +68,7 @@ function responder(mis){
 
 }
 function añadir_mensaje(mes) {
+    const mensajes = document.querySelector(".chat-messages")
     const mis = mes
     input.value = ""
     if (!mis) return
@@ -71,7 +80,6 @@ boton.addEventListener('click', () => {
     añadir_mensaje(["cliente",input.value])
     responder(mensaje)
 })
-
 input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault()

@@ -195,6 +195,8 @@
                 <div class="punto"></div>
             </div>
         `
+        const col_serv = document.querySelector(".servidor").style.backgroundColor
+        chatLi.style.backgroundColor = col_serv
         mensajes.appendChild(chatLi)
         mensajes_grid.scrollTo(0, mensajes.scrollHeight)
         fetch("http://localhost:8000/",{

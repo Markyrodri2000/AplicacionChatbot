@@ -82,10 +82,8 @@ function cod_aplicar(){
     cambiar(input_titulo.value,input_nombre.value,color_fondo.value,color_nav.value,color_servidor.value,color_cliente.value,color_fuente.value)
     widget_cambiar_dinamicamente()
     if(sessionStorage.getItem(nombre+"session")=== "activa"){
-        const chat_guardar = document.querySelector(".chat-container").innerHTML
-        const form = document.querySelector(".formulario1")
+        const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
         sessionStorage.setItem(nombre,chat_guardar)
-        sessionStorage.setItem(nombre+"form",form.innerHTML)
     }
 }
 aplicar.addEventListener('click', () => {
@@ -100,41 +98,48 @@ entrenar.addEventListener('click', () => {
 restablecer.addEventListener('click', () => {
     const actual = document.querySelector(".chat-header h2")
     actual.innerHTML = "ChatBot"
+    const input_titulo = document.querySelector(".tit")
     input_titulo.value = ""
     input_titulo.placeholder = "ChatBot"
 
-    const act = chat.querySelector("li text")
+    const messages = document.querySelector(".chat-messages")
+    const act = messages.querySelector("li text")
     act.innerHTML = "Alexa"
+    const input_nombre = document.querySelector(".nombre_chat")
     input_nombre.value = ""
     input_nombre.placeholder = "Alexa"
 
-    chat.style.backgroundColor = "#d3b378"
+    messages.style.backgroundColor = "#d3b378"
+    const color_fondo = document.querySelector(".formulario1 .color-fondo")
     color_fondo.value = "#d3b378"
 
+    const header = document.querySelector(".chat-header")
     header.style.backgroundColor = "#ffa500"
+    const color_nav = document.querySelector(".formulario1 .color-nav")
     color_nav.value = "#ffa500"
 
+    const color_servidor = document.querySelector(".formulario1 .color-servidor")
     color_servidor.value = "#e0e0e0"
     const serv = document.querySelectorAll(".servidor")
     serv.forEach(s => {
         s.style.backgroundColor = "#e0e0e0"
     })
 
+    const color_cliente = document.querySelector(".formulario1 .color-cliente")
     color_cliente.value = "#eea74a"
     const cli = document.querySelectorAll(".cliente")
     cli.forEach(c => {
         c.style.backgroundColor = "#eea74a"
     })
 
-    chat.style.color = "#000000"
+    messages.style.color = "#000000"
     header.style.color = "#000000"
+    const color_fuente = document.querySelector(".formulario1 .color-fuente")
     color_fuente.value = "#000000"
     widget_cambiar_dinamicamente()
     if(sessionStorage.getItem(nombre+"session")=== "activa"){
-        const chat_guardar = document.querySelector(".chat-container").innerHTML
-        const form = document.querySelector(".formulario1")
+        const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
         sessionStorage.setItem(nombre,chat_guardar)
-        sessionStorage.setItem(nombre+"form",form.innerHTML)
     }
 })
 function widget_cambiar_dinamicamente(){
