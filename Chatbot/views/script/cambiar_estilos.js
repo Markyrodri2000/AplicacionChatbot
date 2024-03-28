@@ -183,7 +183,7 @@ function widget_cambiar_dinamicamente(){
             const boton = document.createElement("button")
             boton.id = "abrir"
             boton.className = "abrir_cerrar_widget"
-            boton.backgroundColor = data.boton_fondo
+            boton.style.backgroundColor = data.boton_fondo
 
             const imagen = document.createElement("img")
             imagen.src = "http://localhost:3000/widget/comment.png"
@@ -236,7 +236,7 @@ probar.addEventListener('click', () => {
             const boton = document.createElement("button")
             boton.id = "abrir"
             boton.className = "abrir_cerrar_widget"
-            boton.backgroundColor = data.boton_fondo
+            boton.style.backgroundColor = data.boton_fondo
 
             const imagen = document.createElement("img")
             imagen.src = "http://localhost:3000/widget/comment.png"
@@ -318,7 +318,7 @@ function descargar_widget(){
         response => response.json()
     ).then(data=>{
         const link = "<link rel="+"stylesheet"+" href=http://localhost:3000"+data.link_estilos+">"
-        const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget">'+"<img src=http://localhost:3000/widget/comment.png></button>"
+        const boton = "<button id="+'"abrir"'+" class="+'"abrir_cerrar_widget" style="background-color:'+data.boton_fondo+'">'+"<img src=http://localhost:3000/widget/comment.png></button>"
         const script = "<script src=http://localhost:3000"+data.link_script+" defer></script>"
         const link2 = "<iframe id="+"widget "+"src=http://localhost:3000"+data.link_iframe+">"
         const cierre = "</iframe>"

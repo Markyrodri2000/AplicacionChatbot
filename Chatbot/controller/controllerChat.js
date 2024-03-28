@@ -62,7 +62,7 @@ function Widget(req,res){
     const random = crypto.getRandomValues(new Uint32Array(1))
     const link = '/widget/crear/'+req.session.nombre+'/'+ random + '.html'
     const iframe = actualizar_valores_widget(req.body,iframeTemplate)
-    const bot_fondo = req.body.color_fondo
+    const bot_fondo = req.body.color_nav
 
     router.get(link, (req, res) => {
         res.setHeader('Content-Type', 'text/html')
