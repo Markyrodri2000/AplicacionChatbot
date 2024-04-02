@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const mensajes = document.querySelector(".chat-messages")
             mensajes.scrollTo(0, mensajes.scrollHeight)
             actualizar_form()
-            //scroll
         }
     }
 })

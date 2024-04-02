@@ -11,6 +11,7 @@ const permisos = 'SET SQL_SAFE_UPDATES = 0'
 const eliminar_token = 'DELETE from apikeys where apikey = ? and usuario_email = ?'
 const validar_token = 'SELECT * FROM apikeys WHERE apikey = ? and usuario_email = ?'
 const guardar_chat = 'INSERT INTO chats set ?'
+const seleccionar_chat = 'SELECT nombre FROM chats WHERE usuario_email = ?'
 
 const queries = {
     comprobacion_register,
@@ -25,6 +26,7 @@ const queries = {
     permisos,
     eliminar_token,
     validar_token,
-    guardar_chat
+    guardar_chat,
+    seleccionar_chat
 }
 export default queries

@@ -335,6 +335,7 @@ guardar.addEventListener('click', () => {
     setTimeout(() => {
         guardar_desp.style.display = "none"
     }, 1000)
+    const titulo = document.querySelector("h2").textContent
     fetch("http://localhost:3000/guardar_chat",{
         method: 'POST',
         headers: {
@@ -342,11 +343,8 @@ guardar.addEventListener('click', () => {
         },
         body: JSON.stringify({
             codigo: sessionStorage.getItem(nombre),
+            nombre: titulo
         })
-    }).then(
-        response => response.json()
-    ).then(data=>{
-        console.log("HOla")
     })
 })
 /*document.addEventListener("click", function(event) {

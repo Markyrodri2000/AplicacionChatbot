@@ -99,9 +99,11 @@ function actualizar_valores_widget(body,iframeTemplate){
 function guardar_chat(req,res){
     const codigo = req.body.codigo
     const usuario_email = req.session.email
+    const nombre = req.body.nombre
     const valores = {
         codigo,
-        usuario_email
+        usuario_email,
+        nombre
     }
     req.getConnection((err, conn) => {
         if (err) {
@@ -122,6 +124,6 @@ const chat = {
     Index,
     Widget,
     Chats,
-    guardar_chat
+    guardar_chat,
 }
 export default chat

@@ -14,6 +14,10 @@
         <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/estilos.css">
         <link rel="stylesheet" href="css/mis_chats.css">
+        <script>
+            var tokens = '<%- JSON.stringify(chats) %>'
+        </script>
+        <script src="./script/mischats.js" defer></script>
     </head>
 <body>
     <%- include('partials/navigation_logout') %>
@@ -24,8 +28,6 @@
                     Mis Chats
                 </div>
                 <form id="chats" method="POST">
-                    <input type="text" name="bot" value="Hola" readonly>
-                    <input type="text" name="bot" value="Hola" readonly>
                 </form>
             </div>
         </div>
