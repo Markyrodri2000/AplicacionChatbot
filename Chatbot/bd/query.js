@@ -12,6 +12,8 @@ const eliminar_token = 'DELETE from apikeys where apikey = ? and usuario_email =
 const validar_token = 'SELECT * FROM apikeys WHERE apikey = ? and usuario_email = ?'
 const guardar_chat = 'INSERT INTO chats set ?'
 const seleccionar_chat = 'SELECT nombre FROM chats WHERE usuario_email = ?'
+const comprobar_chat = 'SELECT * FROM chats WHERE nombre = ?'
+const sobreescribir = 'UPDATE chats SET codigo = ? WHERE usuario_email = ?'
 
 const queries = {
     comprobacion_register,
@@ -27,6 +29,8 @@ const queries = {
     eliminar_token,
     validar_token,
     guardar_chat,
-    seleccionar_chat
+    seleccionar_chat,
+    comprobar_chat,
+    sobreescribir
 }
 export default queries

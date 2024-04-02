@@ -47,12 +47,17 @@
         border-radius: 20px;
         cursor: pointer;
     }
+    .Cancelar{
+        margin-top: -35px;
+        margin-left: 90px;
+    }
     .probar{
         margin-top: 80px;
     }
 
     .entregar,
-    .guardar_desp {
+    .guardar_desp,
+    .existente {
         z-index: 1;
         display: none;
         position: fixed;
@@ -73,7 +78,8 @@
         height: 100px;
         margin-bottom: 10px;
     }
-    .cerrar{
+    .cerrar,
+    .cerrar_guardar{
         float: right;
         background-color: #f0f0f0;
         border: none;
@@ -110,6 +116,16 @@
     .link{
         width: 400px;
         height: 20px;
+    }
+    .otro_nombre{
+        display:none;
+        width: 250px;
+        height: 30px;
+        margin-bottom: 20px;
+    }
+    .Guardar,
+    .Cancelar{
+        display:none;
     }
     #config-train{
         margin-bottom: 30px;
@@ -171,6 +187,16 @@
         <span class="guardar_desp">
             <img class="check" src="../img/checked.png">
             <p class="check_p">Widget guardado</p>
+        </span>
+        <span class="existente">
+            <button class="cerrar_guardar"><img src="../img/close.png"></button>
+            <p>Ya existe un chat guardado con el nombre Chatbot.</p>
+            <p>¿Desea sobreescribirlo?</p>
+            <input class="otro_nombre" type="text" placeholder="">
+            <button class="sobreescribir">Sobreescribir</button>
+            <button class="guardar_otro_nombre">Cambiar nombre</button>
+            <button class="Guardar">Guardar</button>
+            <button class="Cancelar">Cancelar</button>
         </span>
     </div>
     <div class="config-chat" id="config-train">

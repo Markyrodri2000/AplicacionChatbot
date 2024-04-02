@@ -153,6 +153,10 @@ body {
     text-align: center;
 }
 
+.no_chats_guardados{
+    margin-left: 45px;
+    margin-top: 50px;
+}
 .inferior a {
     display: block;
     text-decoration: none;

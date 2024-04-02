@@ -331,11 +331,10 @@ function descargar_widget(){
     })
 }
 guardar.addEventListener('click', () => {
-    guardar_desp.style.display = "block"
-    setTimeout(() => {
-        guardar_desp.style.display = "none"
-    }, 1000)
     const titulo = document.querySelector("h2").textContent
+    guardar_chat(titulo,"guardar")
+})
+function guardar_chat(titulo,state){
     fetch("http://localhost:3000/guardar_chat",{
         method: 'POST',
         headers: {
@@ -343,10 +342,62 @@ guardar.addEventListener('click', () => {
         },
         body: JSON.stringify({
             codigo: sessionStorage.getItem(nombre),
-            nombre: titulo
+            nombre: titulo,
+            estado: state
         })
+    }).then(
+        response => response.json()
+    ).then(data=>{
+        if(data.respuesta == "Existe"){
+            const existe = document.querySelector(".existente")
+            existe.style.display = "block"
+            const cerrar = document.querySelector(".cerrar_guardar")
+                cerrar.addEventListener('click', () => {
+                existe.style.display = "none"
+            })
+            const mostrar_input = document.querySelector(".guardar_otro_nombre")
+            const sobreescribir = document.querySelector(".sobreescribir")
+            mostrar_input.addEventListener('click', () => {
+                const input = document.querySelector(".otro_nombre")
+                input.placeholder = titulo
+                input.style.display = "block"
+
+                const guardar = document.querySelector(".Guardar")
+                const cancelar = document.querySelector(".Cancelar")
+
+                sobreescribir.style.display="none"
+                mostrar_input.style.display = "none"
+                guardar.style.display = "block"
+                cancelar.style.display = "block"
+                
+                cancelar.addEventListener('click', () => {
+                    sobreescribir.style.display="block"
+                    mostrar_input.style.display = "block"
+                    guardar.style.display = "none"
+                    cancelar.style.display = "none"
+                    input.style.display = "none"
+
+                    mostrar_input.style.marginLeft = "120px"
+                    mostrar_input.style.marginTop = "-35px"
+                })
+                guardar.addEventListener('click',() => {
+                    guardar_chat(input.value,"guardar")
+                })
+            })
+            sobreescribir.addEventListener('click',() => {
+                guardar_chat(titulo,"sobreescribir")
+            })
+        }if(data.respuesta == "Guardado"){
+            const existe = document.querySelector(".existente")
+            existe.style.display = "none"
+            guardar_desp.style.display = "block"
+            setTimeout(() => {
+                guardar_desp.style.display = "none"
+            }, 1000)
+            return true
+        }
     })
-})
+}
 /*document.addEventListener("click", function(event) {
     console.log(entregar.style.display)
     if(entregar.style.display == "block"){

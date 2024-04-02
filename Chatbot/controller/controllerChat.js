@@ -1,6 +1,7 @@
 import router from '../routes/routing.js'
 import fs from 'fs'
 import queries from '../bd/query.js'
+import usuario from './controllerUsuario.js'
 
 async function Index(req,res){
     let nom = ""
@@ -120,6 +121,7 @@ function guardar_chat(req,res){
     const codigo = req.body.codigo
     const usuario_email = req.session.email
     const nombre = req.body.nombre
+    const estado = req.body.estado
     const valores = {
         codigo,
         usuario_email,
@@ -129,13 +131,41 @@ function guardar_chat(req,res){
         if (err) {
             console.log('Error al conectar a la base de datos');
         }
-        conn.query(queries.guardar_chat, valores, (err, rows) => {
+        conn.query(queries.comprobar_chat, nombre, (err, rows) => {
             if (err) {
-                console.log('Error al guardar chat en la base de datos');
+                console.log('Error al buscar chat en la base de datos');
                 res.redirect("/login")
             }
             else{
-                console.log("Chat guardado correctamente")
+                console.log("Chat consultado correctamente")
+                if(rows.length>0){
+                    if(estado=="guardar"){
+                        res.send({respuesta: "Existe"})
+                    }else{
+                        conn.query(queries.sobreescribir, [codigo,usuario_email], (err, rows) => {
+                            if (err) {
+                                console.log('Error al sobreescribir chat en la base de datos');
+                                res.redirect("/login")
+                            }
+                            else{
+                                console.log("Chat sobreescrito correctamente")
+                                res.send({respuesta: "Guardado"})
+                            }
+                        });
+                    }
+                }else{
+                    conn.query(queries.guardar_chat, valores, (err, rows) => {
+                        if (err) {
+                            console.log('Error al guardar chat en la base de datos');
+                            console.log(err)
+                            res.redirect("/login")
+                        }
+                        else{
+                            console.log("Chat guardado correctamente")
+                            res.send({respuesta: "Guardado"})
+                        }
+                    });
+                }
             }
         });
     });
