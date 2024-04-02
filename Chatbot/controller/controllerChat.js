@@ -51,7 +51,27 @@ function desplegar_css(req,res){
 }
 function Chats(req,res){
     if(req.session.nombre!=null){
-        res.render("chats", {nombre: req.session.nombre})
+        const email = req.session.email
+        req.getConnection((err, conn) => {
+            if (err) {
+                console.log('Error al conectar a la base de datos');
+            }
+            conn.query(queries.seleccionar_chat, email, (err, rows) => {
+                if (err) {
+                    console.log('Error al consultar chats');
+                    res.redirect("/login")
+                }
+                else{
+                    if(rows.length>0){
+                        let chats = rows.map(row => ({ ...row }))
+                        console.log("Chats consultados correctamente")
+                        res.render("chats",{"chats":chats})
+                    }else{
+                        res.render("chats",{"chats":""})
+                    }
+                }
+            });
+        });
     }
     else{
         res.redirect("/login")
