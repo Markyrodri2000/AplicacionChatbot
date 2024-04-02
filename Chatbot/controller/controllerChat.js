@@ -1,5 +1,6 @@
 import router from '../routes/routing.js'
 import fs from 'fs'
+import queries from '../bd/query.js'
 
 async function Index(req,res){
     let nom = ""
@@ -68,23 +69,6 @@ function Widget(req,res){
         res.setHeader('Content-Type', 'text/html')
         res.send(iframe)
     })
-    /*
-    const javascript = fs.readFileSync('./controller/Widget/widget.js','utf-8')
-    var script = `
-    var añadir = \`
-        <link rel=stylesheet href=http://localhost:3000/widget/estilos.css>
-        <button id="abrir" class="abrir_cerrar_widget"><img src=http://localhost:3000/widget/comment.png></button>
-        <iframe id="widget" src=http://localhost:3000`+link+`></iframe>
-    \`
-    document.body.innerHTML = añadir + document.body.outerHTML
-    ${javascript}
-    `
-    const rand = crypto.getRandomValues(new Uint32Array(1))
-    const link_def = '/widget/'+req.session.nombre+'/'+ rand + '.js'
-    router.get(link_def, (req, res) => {
-        res.setHeader('Content-Type', 'text/javascript')
-        res.send(script)
-    })*/
     res.send(JSON.stringify({
         link_estilos: '/widget/estilos.css',
         link_script: '/widget/widget.js',
@@ -111,9 +95,33 @@ function actualizar_valores_widget(body,iframeTemplate){
 
     return iframe
 }
+
+function guardar_chat(req,res){
+    const codigo = req.body.codigo
+    const usuario_email = req.session.email
+    const valores = {
+        codigo,
+        usuario_email
+    }
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.log('Error al conectar a la base de datos');
+        }
+        conn.query(queries.guardar_chat, valores, (err, rows) => {
+            if (err) {
+                console.log('Error al guardar chat en la base de datos');
+                res.redirect("/login")
+            }
+            else{
+                console.log("Chat guardado correctamente")
+            }
+        });
+    });
+}
 const chat = {
     Index,
     Widget,
-    Chats
+    Chats,
+    guardar_chat
 }
 export default chat

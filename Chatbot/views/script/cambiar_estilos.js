@@ -291,9 +291,6 @@ abrir_descargar.addEventListener('click', () => {
             }
         })
     })
-    cerrar_guardar.addEventListener('click', () => {
-        guardar_desp.style.display = "none"
-    })
     cerrar.addEventListener('click', () => {
         entregar.style.display = "none"
     })
@@ -335,8 +332,22 @@ function descargar_widget(){
 }
 guardar.addEventListener('click', () => {
     guardar_desp.style.display = "block"
-    const chat = document.querySelector(".chat-messages")
-    console.log(chat)
+    setTimeout(() => {
+        guardar_desp.style.display = "none"
+    }, 1000)
+    fetch("http://localhost:3000/guardar_chat",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            codigo: sessionStorage.getItem(nombre),
+        })
+    }).then(
+        response => response.json()
+    ).then(data=>{
+        console.log("HOla")
+    })
 })
 /*document.addEventListener("click", function(event) {
     console.log(entregar.style.display)

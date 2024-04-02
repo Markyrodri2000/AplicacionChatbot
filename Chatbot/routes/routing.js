@@ -23,6 +23,7 @@ router.post('/cambiar_password', usuario.CambiarPsw)
 router.post('/cerrar', usuario.Cerrar)
 router.post('/borrar_token',usuario.Borrar)
 router.post('/validar_token',usuario.ValidarToken)
+router.post('/guardar_chat',chat.guardar_chat)
 
 //Servir Widget
 router.post('/widget',(chat.Widget))
