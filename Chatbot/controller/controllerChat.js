@@ -170,10 +170,57 @@ function guardar_chat(req,res){
         });
     });
 }
+
+function editar_chats(req,res){
+    const usuario_email = req.session.email
+    const nombre = req.body.nombre
+    
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.log('Error al conectar a la base de datos');
+        }
+        else{
+            conn.query(queries.seleccionar_codigo, [nombre,usuario_email], (err, rows) => {
+                if (err) {
+                    console.log('Error al seleccionar códgio en la base de datos');
+                    res.redirect("/login")
+                }
+                else{
+                    console.log("Código consultado correctamente")
+                    res.send({nombre: req.session.nombre,codigo: rows[0].codigo})
+                }
+            });
+        }
+    })
+}
+function borrar_chat(req,res){
+    const usuario_email = req.session.email
+    const nombre = req.body.nombre
+    
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.log('Error al conectar a la base de datos');
+        }
+        else{
+            conn.query(queries.borrar_chat, [nombre,usuario_email], (err, rows) => {
+                if (err) {
+                    console.log('Error al borrar chat en la base de datos');
+                    res.redirect("/login")
+                }
+                else{
+                    console.log("Chat borrado correctamente")
+                    res.send({nombre: req.session.nombre})
+                }
+            });
+        }
+    })
+}
 const chat = {
     Index,
     Widget,
     Chats,
     guardar_chat,
+    editar_chats,
+    borrar_chat
 }
 export default chat

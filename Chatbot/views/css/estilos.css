@@ -196,7 +196,7 @@ nav {
     display: flex;
     margin-left: auto; /* Mueve la lista ul a la derecha */
 }
-.borrar{
+.borrar_chat{
     width: 20px;
     height: 20px;
     float:right;

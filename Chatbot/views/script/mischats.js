@@ -9,7 +9,7 @@ if(json_chats.length>0){
         const mis_chat = document.querySelector("#MisChats #chats")
 
         const borrar = document.createElement("img")
-        borrar.classList.add("borrar")
+        borrar.classList.add("borrar_chat")
         borrar.src = "../img/delete.png"
         borrar.id = json_chats[key].nombre
 
@@ -23,25 +23,22 @@ if(json_chats.length>0){
         mis_chat.appendChild(editar)
 
         borrar.addEventListener("click", function() {
-            const elemento = "p.token_key_ocultado#"+borrar.id
-            const sel = document.querySelector(elemento)
-            const texto = sel.textContent
-
-            fetch("http://localhost:3000/borrar_token",{
+            fetch("http://localhost:3000/borrar_chat",{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    key: texto
+                    nombre: json_chats[key].nombre
                 })
+            }).then(
+                response => response.json()
+            )
+            .then( data => {
+                sessionStorage.removeItem(data.nombre)
+                sessionStorage.removeItem(data.nombre+"session")
+                window.location.href = "http://localhost:3000/chats";
             })
-            const div = document.querySelector("div#"+borrar.id)
-            div.remove()
-            if(mensajes_tokens.children.length===0){
-                console.log("Hola")
-                no_tokens()
-            }
         })
 
         inp.addEventListener('mouseover',() => {
@@ -52,6 +49,24 @@ if(json_chats.length>0){
             })
         })
 
+        editar.addEventListener('click', () => {
+            fetch("http://localhost:3000/editar_chat",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: json_chats[key].nombre
+                })
+            })
+            .then(
+                response => response.json()
+            )
+            .then( data => {
+                sessionStorage.setItem(data.nombre,data.codigo)
+                window.location.href = "http://localhost:3000/";
+            })
+        })
         editar.addEventListener('mouseover',() => {
             inp.style.backgroundColor = "#d3b378"
             editar.style.cursor = "pointer"

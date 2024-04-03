@@ -14,6 +14,8 @@ const guardar_chat = 'INSERT INTO chats set ?'
 const seleccionar_chat = 'SELECT nombre FROM chats WHERE usuario_email = ?'
 const comprobar_chat = 'SELECT * FROM chats WHERE nombre = ?'
 const sobreescribir = 'UPDATE chats SET codigo = ? WHERE usuario_email = ?'
+const borrar_chat = 'DELETE from chats where nombre = ? and usuario_email = ?'
+const seleccionar_codigo = 'SELECT codigo FROM chats WHERE nombre = ? and usuario_email = ?'
 
 const queries = {
     comprobacion_register,
@@ -31,6 +33,8 @@ const queries = {
     guardar_chat,
     seleccionar_chat,
     comprobar_chat,
-    sobreescribir
+    sobreescribir,
+    borrar_chat,
+    seleccionar_codigo
 }
 export default queries
