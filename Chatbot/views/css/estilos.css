@@ -196,6 +196,20 @@ nav {
     display: flex;
     margin-left: auto; /* Mueve la lista ul a la derecha */
 }
+.borrar{
+    width: 20px;
+    height: 20px;
+    float:right;
+    margin-top:-41px;
+    margin-right: 10px;
+}
+.editar{
+    width: 20px;
+    height: 20px;
+    float:right;
+    margin-top:-41px;
+    margin-right: 40px;
+}
 
 .elementos li {
     margin: 0 15px;
