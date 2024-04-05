@@ -64,7 +64,7 @@ if(json_chats.length>0){
             )
             .then( data => {
                 sessionStorage.setItem(data.nombre,data.codigo)
-                window.location.href = "http://localhost:3000/";
+                window.location.href = "http://localhost:3000/"
             })
         })
         editar.addEventListener('mouseover',() => {
