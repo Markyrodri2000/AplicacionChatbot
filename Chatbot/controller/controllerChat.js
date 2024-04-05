@@ -182,7 +182,7 @@ function editar_chats(req,res){
         else{
             conn.query(queries.seleccionar_codigo, [nombre,usuario_email], (err, rows) => {
                 if (err) {
-                    console.log('Error al seleccionar códgio en la base de datos');
+                    console.log('Error al seleccionar código en la base de datos');
                     res.redirect("/login")
                 }
                 else{
