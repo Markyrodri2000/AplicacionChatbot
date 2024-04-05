@@ -19,6 +19,7 @@
     border: none;
     align-items: center;
     padding: 13px;
+    z-index: 999;
 }
 .abrir_cerrar_widget img{
     width: 30px;
