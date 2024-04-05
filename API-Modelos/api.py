@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 #from chat_config import config
-from llama import responder
+from together import responder
 
 app = Flask(__name__)
 CORS(app)
