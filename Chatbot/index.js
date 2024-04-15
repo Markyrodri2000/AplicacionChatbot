@@ -7,7 +7,6 @@ import bodyParser from 'body-parser'
 import mysql from 'mysql2'
 import myconnection from 'express-myconnection'
 import session from 'express-session'
-import cookieParser from 'cookie-parser'
 import db from './bd/config.js'
 
 const app = express()
