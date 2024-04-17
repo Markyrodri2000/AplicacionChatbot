@@ -61,6 +61,18 @@ CREATE TABLE `users` (
 --
 -- Dumping data for table `users`
 --
+DROP TABLE IF EXISTS `chats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `chats` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(500) NOT NULL,
+  `usuario_email` varchar(255) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `usuario_email` (`usuario_email`),
+  CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`usuario_email`) REFERENCES `users` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
