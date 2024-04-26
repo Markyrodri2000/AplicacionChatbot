@@ -1,31 +1,25 @@
+
 import paramiko
 
-hostname = '4.212.241.183'
-username = 'azureuser'
-password = 'tu_contraseña'
-script_path = '/ruta/al/script/remoto.py'
-parametros = ['parametro1', 'parametro2']
+HOSTNAME = '52.143.134.115'
+USERNAME = 'azureuser'
+PORT= 50000
+fingerpoint = "SHA256:t+hHcZ9Tym7g6bLwbnR8wak4k+E40MLqxgbfBpuUPr0"
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.RejectPolicy())
 
-def ejecutar_script_remoto(hostname, username, password, script_path, parametros):
-    # Configurar la conexión SSH
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+try:
+    ssh.connect(HOSTNAME, username=USERNAME, port=PORT)
+except paramiko.ssh_exception.SSHException as e:
+    print("La huella digital del servidor no coincide.")
+    print("Por favor, verifica la huella digital manualmente y vuelve a intentarlo.")
+    raise e
 
-    # Conectar a la máquina virtual
-    ssh.connect(hostname, username=username, password=password)
+ssh.connect(HOSTNAME, username=USERNAME, port=PORT)
 
-    # Construir el comando para ejecutar el script con los parámetros
-    comando = f'python {script_path} {" ".join(parametros)}'
+comando = 'ls'
 
-    # Ejecutar el comando en la máquina virtual
-    stdin, stdout, stderr = ssh.exec_command(comando)
+stdin, stdout, stderr = ssh.exec_command(comando)
 
-    # Leer la salida del comando
-    salida = stdout.read().decode('utf-8')
-
-    # Cerrar la conexión SSH
-    ssh.close()
-
-    return salida
-
-print('Respuesta del script remoto:')
+print(stdout)
+ 
