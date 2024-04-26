@@ -1,7 +1,7 @@
 import paramiko
 
-hostname = 'dirección_IP_de_tu_máquina_virtual'
-username = 'tu_usuario_ssh'
+hostname = '4.212.241.183'
+username = 'azureuser'
 password = 'tu_contraseña'
 script_path = '/ruta/al/script/remoto.py'
 parametros = ['parametro1', 'parametro2']
