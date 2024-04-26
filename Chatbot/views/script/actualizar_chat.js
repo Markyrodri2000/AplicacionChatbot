@@ -69,6 +69,7 @@ function responder(mis){
 }
 function añadir_mensaje(mes) {
     const mensajes = document.querySelector(".chat-messages")
+    console.log(mensajes)
     const mis = mes
     input.value = ""
     if (!mis) return

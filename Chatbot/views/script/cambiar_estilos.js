@@ -14,6 +14,7 @@ const cerrar_guardar = document.querySelector(".cerrar-guardar")
 const mis_chats = document.querySelector(".mis-chats")
 const entrenar = document.querySelector(".train")
 const probar = document.querySelector(".probar")
+const restablecer_chat = document.querySelector(".restablecer-chat")
 
 const input_titulo = document.querySelector(".tit")
 const input_nombre = document.querySelector(".nombre_chat")
@@ -398,11 +399,17 @@ function guardar_chat(titulo,state){
         }
     })
 }
-/*document.addEventListener("click", function(event) {
-    console.log(entregar.style.display)
-    if(entregar.style.display == "block"){
-        if (event.target !== entregar && !entregar.contains(event.target)) {
-            entregar.style.display = "none";
-        }
+restablecer_chat.addEventListener("click", function(event) {
+    const chats = document.querySelector(".chat-messages")
+    const [primero, segundo] = chats.querySelectorAll("li")
+    
+    chats.innerHTML = `
+        ${primero.outerHTML}
+        ${segundo.outerHTML}
+    `
+
+    if(sessionStorage.getItem(nombre+"session")=== "activa"){
+        const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
+        sessionStorage.setItem(nombre,chat_guardar)
     }
-});*/
+});
