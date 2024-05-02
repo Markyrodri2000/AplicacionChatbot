@@ -1,0 +1,196 @@
+.configuracion{
+    display: grid;
+}
+.config-chat {
+    padding: 10px;
+    max-height: 100000px;
+    max-width: 750px;
+    overflow-y: auto;
+    overflow-x: auto;
+    height: auto;
+    border-radius: 20px;
+    margin-top: 50px;
+    margin-left: 5%;
+    margin-bottom: 0px;
+    background-color: #d3b378;
+    display: grid;
+    grid-template-columns: 55% 35%;
+    border: 1px solid black;
+    border-radius: 8px;
+    gap:40px;
+}
+
+form {
+    margin-bottom: 30px;
+}
+
+button {
+    background-color: #ffa6003a;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Overpass', sans-serif;
+    margin-top: 5px;
+}
+
+.widget,
+.guardar,
+.probar {
+    width: 150px;
+    height: 50px;
+    background-color: orange;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.Cancelar{
+    margin-top: -35px;
+    margin-left: 90px;
+}
+.probar{
+    margin-top: 80px;
+}
+
+.entregar,
+.guardar_desp,
+.existente {
+    z-index: 1;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.entregar_codigo{
+    display:none;
+}
+
+.entregar textarea{
+    width: 1050px; 
+    height: 100px;
+    margin-bottom: 10px;
+}
+.cerrar,
+.cerrar_guardar{
+    float: right;
+    background-color: #f0f0f0;
+    border: none;
+}
+.cerrar img{
+    width: 20px;
+    height: 20px;
+    float:right;
+    margin-left: 10px;
+}
+.entregar button,
+.guardar_desp button {
+    margin-top: 10px;
+}
+.guardar_desp{
+    width: 200px;
+}
+.check{
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin-top: 15px;
+    margin-right: 20px;
+}
+.api_key_validar{
+    width: 300px;
+    height: 30px;
+    margin-bottom: 20px;
+}
+form .descripcion{
+    width: 400px; 
+    height: 50px;
+}
+.link{
+    width: 400px;
+    height: 20px;
+}
+.otro_nombre{
+    display:none;
+    width: 250px;
+    height: 30px;
+    margin-bottom: 20px;
+}
+.Guardar,
+.Cancelar{
+    display:none;
+}
+#config-train{
+    margin-bottom: 30px;
+    max-width: 450px;
+    
+}
+.slider{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.entrenamiento div,label,textarea,select{
+    margin-bottom: 5px;
+}
+.train{
+    width: 400px;
+}
+.slidervalue{
+    margin-left: 5px;
+    height: 10px;
+}
+
+#temperatura{
+    pointer-events: none;
+}
+@media (max-width: 768px) {
+    .config-chat{
+        margin-left: 10px;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+    }
+    .controlar-widget{
+        grid-column: span 2;
+    }
+}
+
+#progress-bar-container {
+    z-index: 1;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    height: 100px; /* Altura fija para el contenedor */
+    width: 200px; /* Anchura fija para el contenedor */
+}
+
+#progress-bar {
+    display: block;
+    height: 20px; /* Ajustar altura según necesites */
+    background-color: #4caf50;
+    animation: progress-animation 2s linear infinite;
+}
+
+/* Resto de estilos */
+
+
+@keyframes progress-animation {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+  

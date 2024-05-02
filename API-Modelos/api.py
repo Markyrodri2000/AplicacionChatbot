@@ -43,13 +43,13 @@ ssh = SSH()
 def post_data():
     mensaje = request.json['mensaje']
     respuesta = ssh.enviar_mensaje(mensaje)
-    print(respuesta)
+
     return jsonify({"mensaje": respuesta})
 
-@app.route('/', methods=['GET'])
-def get_data():
-    data = {'message': 'Hola desde el servidor Flask!'}
-    return jsonify(data)
+@app.route('/entrenar', methods=['POST'])
+def post_data_2():
+    parametros = request.json
+    return "Listo"
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()
