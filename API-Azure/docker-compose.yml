@@ -1,0 +1,19 @@
+version: '2.3'
+
+services:
+  API:
+    build:
+      context: .
+      dockerfile: ./API-Modelos/Dockerfile
+    image: api
+    container_name: api
+    ports:
+      - 8000:8000
+    volumes:
+      - ./API-Modelos/:/api
+
+
+  
+
+
+
