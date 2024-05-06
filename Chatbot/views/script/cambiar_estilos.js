@@ -91,11 +91,6 @@ aplicar.addEventListener('click', () => {
     cod_aplicar()
 })
 
-entrenar.addEventListener('click', () => {
-    const link = document.querySelector(".link")
-    console.log("link")
-})
-
 restablecer.addEventListener('click', () => {
     const actual = document.querySelector(".chat-header h2")
     actual.innerHTML = "ChatBot"

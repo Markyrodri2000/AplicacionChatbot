@@ -1,4 +1,5 @@
 <script src="../script/entrenamiento.js" defer></script>
+<link rel="stylesheet" href="../css/entrenamiento.css" />
 <div class="config-chat" id="config-train">
     <div class="entrenamiento">
         <form>
@@ -7,25 +8,28 @@
             <label>Idioma</label>
             <select id="desplegable_idioma">
                 <option value="es">Español</option>
-                <option value="en">Español</option>
+                <option value="en">Inglés</option>
             </select><br>
             <div class="slider">
                 <label id="temperatura">Temperatura</label>
                 <input class="miSlider" type="range" min="0" max="1" step="0.01" value="0.5" id="miSlider">
-                <div class="slidervalue" id="sliderValue">0.5</div>
+                <div class="slidervalue" id="sliderValue" value="0.5">0.5</div>
             </div>
             <label>Modelo:</label>
             <select id="desplegable_modelo">
-                <option value="opcion1_modelo">llama2</option>
-                <option value="opcion1_modelo">mistral</option>
-                <option value="opcion1_modelo">gemma</option>
+                <option value="llama2" selected>llama2</option>
+                <option value="mistral">mistral</option>
+                <option value="gemma">gemma</option>
             </select><br>
             <label>Link web (opcional):<br><input class="link" type="text" placeholder="https://www.zara.com/es/"></label><br>
         </form>
         <button class="train">Entrenar</button>
-        <div id="progress-bar-container">
+        <div id="overlay"></div>
+        <span class = "progressbar" id ="progress-bar-container">
             <p>Cargando...</p>
-            <span id="progress-bar"></span>
-        </div>          
+            <div class="barra">
+                <span id="progress-bar"></span>
+            </div>
+        </span>          
     </div>
 </div>

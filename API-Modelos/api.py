@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import json
 import paramiko
 
 app = Flask(__name__)
@@ -12,7 +13,13 @@ def COMMAND_POST(mensaje):
     return f"""curl -X POST \
 -H "Content-Type: application/json" \
 -d '{{"mensaje":"{mensaje}"}}' \
-http://localhost:8000"""
+http://localhost:8000/responder"""
+
+def ENTRENAR(objeto):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{objeto}' \
+http://localhost:8000/entrenar"""
 
 KEY = "./id_rsa"
 
@@ -24,8 +31,8 @@ class SSH:
         self.ssh.connect(HOSTNAME, username=USERNAME, port=PORT, key_filename=KEY)
         print("Conexión SSH establecida correctamente...")
 
-    def enviar_mensaje(self, mensaje):
-        stdin, stdout1, stderr = self.ssh.exec_command(COMMAND_POST(mensaje))
+    def instrucciones(self, comando):
+        stdin, stdout1, stderr = self.ssh.exec_command(comando)
         respuesta = stdout1.read().decode("utf-8")
         if stdout1.channel.recv_exit_status() == 0:
             return respuesta
@@ -41,15 +48,20 @@ ssh = SSH()
 
 @app.route('/', methods=['POST'])
 def post_data():
+    print("Hola2")
     mensaje = request.json['mensaje']
-    respuesta = ssh.enviar_mensaje(mensaje)
+
+    respuesta = ssh.instrucciones(COMMAND_POST(mensaje))
 
     return jsonify({"mensaje": respuesta})
 
 @app.route('/entrenar', methods=['POST'])
 def post_data_2():
-    parametros = request.json
-    return "Listo"
+    req = request.json
+
+    respuesta = ssh.instrucciones(ENTRENAR(json.dumps(req)))
+
+    return jsonify({"mensaje": respuesta})
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()

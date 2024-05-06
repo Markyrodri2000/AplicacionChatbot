@@ -7,31 +7,36 @@ slider.addEventListener("input", () => {
 
 var idioma = document.getElementById("desplegable_idioma")
 var selectedOptionidioma = null
-var selectedValueidioma = null
+var selectedValueidioma = "es"
 
 idioma.addEventListener("change", function() {
-    selectedOptionidioma = selectElement.options[selectElement.selectedIndex]
-    selectedValueidioma = selectedOption.value
+    selectedOptionidioma = idioma.options[idioma.selectedIndex]
+    selectedValueidioma = selectedOptionidioma.value
 });
 
 var modelo = document.getElementById("desplegable_modelo");
 var selectedOptionmodelo = null
-var selectedValuemodelo = null
+var selectedValuemodelo = "llama2"
+
 modelo.addEventListener("change", function() {
-    selectedOptionmodelo = selectElement.options[selectElement.selectedIndex]
-    selectedValuemodelo = selectedOption.value
-});
+    selectedOptionmodelo = modelo.options[modelo.selectedIndex]
+    selectedValuemodelo = selectedOptionmodelo.value
+    console.log("Opción seleccionada:", selectedValuemodelo);
+})
 
 const entrenamiento = document.querySelector(".train");
 entrenamiento.addEventListener("click",() => {
     const progressbar = document.querySelector(".progressbar")
     progressbar.style.display="block"
+    document.addEventListener('click', bloquearClick, true);
+    document.addEventListener('keydown', bloquearTeclado, true);
     
-    const temperatura = document.querySelector(".miSlider").value
-    const prompt = document.querySelector(".descripcion").textContent
-    const idioma = selectedValueidioma
-    const modelo = selectedValuemodelo
-    const link = document.querySelector(".link").value
+    temperatura = document.querySelector(".miSlider").value
+    promptt = document.querySelector(".descripcion").value
+    if(promptt == ""){
+        promptt = "You are a helpful assistant. Please response to the user queries"
+    }
+    link = document.querySelector(".link").value
 
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
@@ -41,11 +46,30 @@ entrenamiento.addEventListener("click",() => {
         body: JSON.stringify(
             {
                 temperatura: temperatura,
-                prompt: prompt,
-                idioma: idioma,
-                modelo: modelo,
+                prompt: promptt,
+                idioma: selectedValueidioma,
+                modelo: selectedValuemodelo,
                 link: link,
             }
         )
     })
+    .then(response => {
+        response.json()
+    })
+    .then(data => {
+        progressbar.style.display="none"
+        document.removeEventListener('click', bloquearClick, true);
+        document.removeEventListener('keydown', bloquearTeclado, true);
+    })
 })
+
+function bloquearClick(evento) {
+    evento.stopPropagation();
+    evento.preventDefault();
+}
+
+
+function bloquearTeclado(evento) {
+    evento.stopPropagation();
+    evento.preventDefault();
+}

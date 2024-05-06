@@ -1,4 +1,5 @@
 Flask
+json
 requests
 flask_cors
 accelerate
