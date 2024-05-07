@@ -4,6 +4,9 @@ flask_cors
 accelerate
 transformers
 langchain
+langchain-chroma 
+beautifulsoup4
+faiss-cpu
 einops
 bitsandbytes
 huggingface_hub

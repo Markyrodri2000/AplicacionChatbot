@@ -73,3 +73,11 @@ function bloquearTeclado(evento) {
     evento.stopPropagation();
     evento.preventDefault();
 }
+
+const restart = document.querySelector("#restar_model").addEventListener('click',() => {
+    document.querySelector(".miSlider").value = 0.5
+    document.querySelector(".descripcion").value = "You are a helpful assistant. Please response to the user queries"
+    idioma.selectedIndex = 0
+    modelo.selectedIndex = 0
+    document.querySelector(".link").value = ""
+})

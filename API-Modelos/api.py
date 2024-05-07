@@ -48,7 +48,6 @@ ssh = SSH()
 
 @app.route('/', methods=['POST'])
 def post_data():
-    print("Hola2")
     mensaje = request.json['mensaje']
 
     respuesta = ssh.instrucciones(COMMAND_POST(mensaje))
