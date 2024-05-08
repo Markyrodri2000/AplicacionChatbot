@@ -122,10 +122,30 @@ function guardar_chat(req,res){
     const usuario_email = req.session.email
     const nombre = req.body.nombre
     const estado = req.body.estado
+    const modelo = req.body.modelo
+    const idioma = req.body.idioma
+    const temperatura = req.body.temperatura
+    const prompt = req.body.promptt
+    const mensajes = req.body.mensajes
+
     const valores = {
         codigo,
         usuario_email,
-        nombre
+        nombre,
+        modelo,
+        idioma,
+        temperatura,
+        prompt,
+        mensajes
+    }
+    const sobreescribir = {
+        codigo,
+        nombre,
+        modelo,
+        idioma,
+        temperatura,
+        prompt,
+        mensajes
     }
     req.getConnection((err, conn) => {
         if (err) {
@@ -142,7 +162,7 @@ function guardar_chat(req,res){
                     if(estado=="guardar"){
                         res.send({respuesta: "Existe"})
                     }else{
-                        conn.query(queries.sobreescribir, [codigo,usuario_email], (err, rows) => {
+                        conn.query(queries.sobreescribir, [sobreescribir,usuario_email,nombre], (err, rows) => {
                             if (err) {
                                 console.log('Error al sobreescribir chat en la base de datos');
                                 res.redirect("/login")
@@ -187,7 +207,7 @@ function editar_chats(req,res){
                 }
                 else{
                     console.log("Código consultado correctamente")
-                    res.send({nombre: req.session.nombre,codigo: rows[0].codigo})
+                    res.send({nombre: req.session.nombre,codigo: rows[0].codigo,modelo: rows[0].modelo,temperatura:rows[0].temperatura,prompt:rows[0].prompt,idioma:rows[0].idioma,mensajes: rows[0].mensajes})
                 }
             });
         }

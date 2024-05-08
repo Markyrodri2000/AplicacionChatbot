@@ -64,6 +64,11 @@ if(json_chats.length>0){
             )
             .then( data => {
                 sessionStorage.setItem(data.nombre,data.codigo)
+                sessionStorage.setItem(data.nombre+"Modelo",data.modelo)
+                sessionStorage.setItem(data.nombre+"Temperatura",data.temperatura)
+                sessionStorage.setItem(data.nombre+"Prompt",data.prompt)
+                sessionStorage.setItem(data.nombre+"Idioma",data.idioma)
+                sessionStorage.setItem(data.nombre+"Mensajes",data.mensajes)
                 window.location.href = "http://localhost:3000/"
             })
         })

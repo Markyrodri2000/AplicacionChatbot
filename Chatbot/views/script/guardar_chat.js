@@ -5,12 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const chat_guardar = chat.innerHTML
             sessionStorage.setItem(nombre,chat_guardar)
             sessionStorage.setItem(nombre+"session", "activa")
+            sessionStorage.setItem(nombre+"Modelo","llama2")
+            sessionStorage.setItem(nombre+"Idioma","Español")
+            sessionStorage.setItem(nombre+"Temperatura","0.5")
+            sessionStorage.setItem(nombre+"Prompt","Eres un asistente servicial. Por favor responda las consultas de los usuarios.")
         }
         else{
             chat.innerHTML = sessionStorage.getItem(nombre)
             const mensajes = document.querySelector(".chat-messages")
             mensajes.scrollTo(0, mensajes.scrollHeight)
             actualizar_form()
+            actualizar_entrenar()
+            cargar_modelo()
         }
     }
 })
@@ -56,6 +62,67 @@ function actualizar_form(){
         color_fuente.value = rgbaToHex(chat.style.color)
     }
    
+}
+
+function cargar_modelo(){
+    var modelo = document.getElementById("desplegable_modelo")
+    selectedOptionmodelo = modelo.options[modelo.selectedIndex]
+
+    var idioma = document.getElementById("desplegable_idioma")
+    selectedOptionidioma = idioma.options[idioma.selectedIndex]
+
+    const progressbar = document.querySelector(".progressbar")
+    progressbar.style.display="block"
+    document.addEventListener('click', bloquearClick, true)
+    document.addEventListener('keydown', bloquearTeclado, true)
+    
+    temperatura = document.querySelector(".miSlider").value
+    promptt = document.querySelector(".descripcion").value
+    if(promptt == ""){
+        promptt = "Eres un asistente servicial. Por favor responda las consultas de los usuarios."
+    }
+    link = document.querySelector(".link").value
+
+    fetch("http://localhost:8000/entrenar",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                temperatura: temperatura,
+                prompt: promptt,
+                idioma: selectedValueidioma,
+                modelo: selectedValuemodelo,
+                link: link,
+                mensajes: sessionStorage.getItem(nombre+"Mensajes")
+            }
+        )
+    })
+    .then(response => {
+        response.json()
+    })
+    .then(data => {
+        progressbar.style.display="none"
+        document.removeEventListener('click', bloquearClick, true)
+        document.removeEventListener('keydown', bloquearTeclado, true)
+
+        sessionStorage.setItem(nombre+"Modelo",selectedOptionmodelo.id)
+        sessionStorage.setItem(nombre+"Idioma",selectedOptionidioma.id)
+        sessionStorage.setItem(nombre+"Temperatura",temperatura)
+        sessionStorage.setItem(nombre+"Prompt",promptt)
+    })
+}
+function actualizar_entrenar(){
+    document.querySelector(".descripcion").value = sessionStorage.getItem(nombre+"Prompt")
+    document.querySelector(".miSlider").value = sessionStorage.getItem(nombre+"Temperatura")
+    document.querySelector(".slidervalue").textContent = sessionStorage.getItem(nombre+"Temperatura")
+
+    var idioma = document.querySelector("#desplegable_idioma #"+sessionStorage.getItem(nombre+"Idioma"))
+    idioma.selected = true
+
+    var modelo = document.querySelector("#desplegable_modelo #"+sessionStorage.getItem(nombre+"Modelo"))
+    modelo.selected = true
 }
 
 function rgbaToHex(rgbaColor) {

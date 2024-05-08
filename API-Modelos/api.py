@@ -21,6 +21,9 @@ def ENTRENAR(objeto):
 -d '{objeto}' \
 http://localhost:8000/entrenar"""
 
+def MENSAJES():
+    return f"""curl http://localhost:8000/mensajes"""
+
 KEY = "./id_rsa"
 
 class SSH:
@@ -61,6 +64,10 @@ def post_data_2():
     respuesta = ssh.instrucciones(ENTRENAR(json.dumps(req)))
 
     return jsonify({"mensaje": respuesta})
+
+@app.route('/get_mensajes', methods=['GET'])
+def post_data_3():
+    return jsonify({"mensajes":ssh.instrucciones(MENSAJES())})
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()

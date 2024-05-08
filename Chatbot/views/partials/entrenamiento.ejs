@@ -4,11 +4,11 @@
     <div class="entrenamiento">
         <form>
             <label>Prompt:</label><br>
-            <textarea class="descripcion" placeholder="You are a helpful assistant. Please response to the user queries"></textarea><br>
+            <textarea class="descripcion" placeholder="Eres un asistente servicial. Por favor responda las consultas de los usuarios."></textarea><br>
             <label>Idioma</label>
             <select id="desplegable_idioma">
-                <option value="es">Español</option>
-                <option value="en">Inglés</option>
+                <option value="es" id="Español">Español</option>
+                <option value="en" id="Inglés">Inglés</option>
             </select><br>
             <div class="slider">
                 <label id="temperatura">Temperatura</label>
@@ -17,9 +17,9 @@
             </div>
             <label>Modelo:</label>
             <select id="desplegable_modelo">
-                <option value="llama2" selected>llama2</option>
-                <option value="mistral">mistral</option>
-                <option value="gemma">gemma</option>
+                <option value="llama2" id="llama2">llama2</option>
+                <option value="mistral" id="mistral">mistral</option>
+                <option value="gemma" id="gemma">gemma</option>
             </select><br>
             <label>Link web (opcional):<br><input class="link" type="text" placeholder="https://www.zara.com/es/"></label><br>
         </form>

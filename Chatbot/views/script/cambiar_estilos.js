@@ -330,7 +330,19 @@ guardar.addEventListener('click', () => {
     const titulo = document.querySelector("h2").textContent
     guardar_chat(titulo,"guardar")
 })
+function get_mensajes(){
+    var mensajes = {}
+    fetch("http://localhost:8000/get_mensajes")
+    .then(response => 
+        response.json()
+    ).then(data=>
+        mensajes = data 
+    )
+    return mensajes
+}
 function guardar_chat(titulo,state){
+    var objeto = get_mensajes()
+    
     fetch("http://localhost:3000/guardar_chat",{
         method: 'POST',
         headers: {
@@ -339,7 +351,12 @@ function guardar_chat(titulo,state){
         body: JSON.stringify({
             codigo: sessionStorage.getItem(nombre),
             nombre: titulo,
-            estado: state
+            estado: state,
+            modelo: sessionStorage.getItem(nombre+"Modelo"),
+            temperatura: sessionStorage.getItem(nombre+"Temperatura"),
+            promptt: sessionStorage.getItem(nombre+"Prompt"),
+            idioma: sessionStorage.getItem(nombre+"Idioma"),
+            mensajes: mensajes
         })
     }).then(
         response => response.json()
