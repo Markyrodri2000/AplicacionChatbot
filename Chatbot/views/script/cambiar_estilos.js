@@ -331,18 +331,20 @@ guardar.addEventListener('click', () => {
     guardar_chat(titulo,"guardar")
 })
 function get_mensajes(){
-    var mensajes = {}
+    const mensajes = null
     fetch("http://localhost:8000/get_mensajes")
     .then(response => 
         response.json()
-    ).then(data=>
-        mensajes = data 
     )
+    .then(data =>
+        mensajes = data
+    )
+    console.log(mensajes)
     return mensajes
 }
 function guardar_chat(titulo,state){
-    var objeto = get_mensajes()
-    
+    const mensajes = get_mensajes()
+    console.log(mensajes)
     fetch("http://localhost:3000/guardar_chat",{
         method: 'POST',
         headers: {
