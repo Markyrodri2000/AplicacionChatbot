@@ -330,88 +330,86 @@ guardar.addEventListener('click', () => {
     const titulo = document.querySelector("h2").textContent
     guardar_chat(titulo,"guardar")
 })
-function get_mensajes(){
-    const mensajes = null
-    fetch("http://localhost:8000/get_mensajes")
-    .then(response => 
-        response.json()
-    )
-    .then(data =>
-        mensajes = data
-    )
-    console.log(mensajes)
-    return mensajes
-}
+
 function guardar_chat(titulo,state){
-    const mensajes = get_mensajes()
-    console.log(mensajes)
-    fetch("http://localhost:3000/guardar_chat",{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            codigo: sessionStorage.getItem(nombre),
-            nombre: titulo,
-            estado: state,
-            modelo: sessionStorage.getItem(nombre+"Modelo"),
-            temperatura: sessionStorage.getItem(nombre+"Temperatura"),
-            promptt: sessionStorage.getItem(nombre+"Prompt"),
-            idioma: sessionStorage.getItem(nombre+"Idioma"),
-            mensajes: mensajes
+    
+    fetch("http://localhost:8000/get_mensajes")
+    .then(response => response.json())
+    .then(messages => {
+        var mensajes = JSON.stringify(messages)
+        console.log(mensajes)
+        fetch("http://localhost:3000/guardar_chat", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                codigo: sessionStorage.getItem(nombre),
+                nombre: titulo,
+                estado: state,
+                modelo: sessionStorage.getItem(nombre + "Modelo"),
+                temperatura: sessionStorage.getItem(nombre + "Temperatura"),
+                promptt: sessionStorage.getItem(nombre + "Prompt"),
+                idioma: sessionStorage.getItem(nombre + "Idioma"),
+                mensajes: mensajes
+            })
         })
-    }).then(
-        response => response.json()
-    ).then(data=>{
-        if(data.respuesta == "Existe"){
-            const existe = document.querySelector(".existente")
-            existe.style.display = "block"
-            const cerrar = document.querySelector(".cerrar_guardar")
+        .then(response2 => response2.json())
+        .then(data => {
+            console.log(sessionStorage.getItem(nombre + "Temperatura"))
+            if (data.respuesta == "Existe") {
+                const existe = document.querySelector(".existente")
+                existe.style.display = "block"
+                const cerrar = document.querySelector(".cerrar_guardar")
                 cerrar.addEventListener('click', () => {
+                    existe.style.display = "none"
+                })
+                const mostrar_input = document.querySelector(".guardar_otro_nombre")
+                const sobreescribir = document.querySelector(".sobreescribir")
+                mostrar_input.addEventListener('click', () => {
+                    const input = document.querySelector(".otro_nombre")
+                    input.placeholder = titulo
+                    input.style.display = "block"
+
+                    const guardar = document.querySelector(".Guardar")
+                    const cancelar = document.querySelector(".Cancelar")
+
+                    sobreescribir.style.display = "none"
+                    mostrar_input.style.display = "none"
+                    guardar.style.display = "block"
+                    cancelar.style.display = "block"
+
+                    cancelar.addEventListener('click', () => {
+                        sobreescribir.style.display = "block"
+                        mostrar_input.style.display = "block"
+                        guardar.style.display = "none"
+                        cancelar.style.display = "none"
+                        input.style.display = "none"
+
+                        mostrar_input.style.marginLeft = "120px"
+                        mostrar_input.style.marginTop = "-35px"
+                    })
+                    guardar.addEventListener('click', () => {
+                        guardar_chat(input.value, "guardar")
+                    })
+                })
+                sobreescribir.addEventListener('click', () => {
+                    guardar_chat(titulo, "sobreescribir")
+                })
+            }
+            if (data.respuesta == "Guardado") {
+                const existe = document.querySelector(".existente")
                 existe.style.display = "none"
-            })
-            const mostrar_input = document.querySelector(".guardar_otro_nombre")
-            const sobreescribir = document.querySelector(".sobreescribir")
-            mostrar_input.addEventListener('click', () => {
-                const input = document.querySelector(".otro_nombre")
-                input.placeholder = titulo
-                input.style.display = "block"
-
-                const guardar = document.querySelector(".Guardar")
-                const cancelar = document.querySelector(".Cancelar")
-
-                sobreescribir.style.display="none"
-                mostrar_input.style.display = "none"
-                guardar.style.display = "block"
-                cancelar.style.display = "block"
-                
-                cancelar.addEventListener('click', () => {
-                    sobreescribir.style.display="block"
-                    mostrar_input.style.display = "block"
-                    guardar.style.display = "none"
-                    cancelar.style.display = "none"
-                    input.style.display = "none"
-
-                    mostrar_input.style.marginLeft = "120px"
-                    mostrar_input.style.marginTop = "-35px"
-                })
-                guardar.addEventListener('click',() => {
-                    guardar_chat(input.value,"guardar")
-                })
-            })
-            sobreescribir.addEventListener('click',() => {
-                guardar_chat(titulo,"sobreescribir")
-            })
-        }if(data.respuesta == "Guardado"){
-            const existe = document.querySelector(".existente")
-            existe.style.display = "none"
-            guardar_desp.style.display = "block"
-            setTimeout(() => {
-                guardar_desp.style.display = "none"
-            }, 1000)
-            return true
-        }
+                guardar_desp.style.display = "block"
+                setTimeout(() => {
+                    guardar_desp.style.display = "none"
+                }, 1000)
+                return true
+            }
+        })
     })
+
+
 }
 restablecer_chat.addEventListener("click", function(event) {
     const chats = document.querySelector(".chat-messages")
@@ -425,5 +423,8 @@ restablecer_chat.addEventListener("click", function(event) {
     if(sessionStorage.getItem(nombre+"session")=== "activa"){
         const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
         sessionStorage.setItem(nombre,chat_guardar)
+        if(sessionStorage.getItem(nombre+"Mensajes")!= null){
+            sessionStorage.removeItem(nombre+"Mensajes")
+        }
     }
 });

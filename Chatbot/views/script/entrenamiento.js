@@ -23,8 +23,7 @@ modelo.addEventListener("change", function() {
     selectedValuemodelo = selectedOptionmodelo.value
 })
 
-const entrenamiento = document.querySelector(".train");
-entrenamiento.addEventListener("click",() => {
+function train_entrenamiento(){
     const progressbar = document.querySelector(".progressbar")
     progressbar.style.display="block"
     document.addEventListener('click', bloquearClick, true)
@@ -66,6 +65,10 @@ entrenamiento.addEventListener("click",() => {
         sessionStorage.setItem(nombre+"Temperatura",temperatura)
         sessionStorage.setItem(nombre+"Prompt",promptt)
     })
+}
+const entrenamiento = document.querySelector(".train");
+entrenamiento.addEventListener("click",() => {
+    train_entrenamiento()
 })
 
 function bloquearClick(evento) {
@@ -86,4 +89,5 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
     idioma.selectedIndex = 0
     modelo.selectedIndex = 0
     document.querySelector(".link").value = ""
+    train_entrenamiento()
 })

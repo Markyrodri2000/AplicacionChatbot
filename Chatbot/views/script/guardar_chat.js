@@ -64,6 +64,19 @@ function actualizar_form(){
    
 }
 
+function cargar_mensajes(){
+    fetch("http://localhost:8000/set_mensajes",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                mensajes:sessionStorage.getItem(nombre+"Mensajes") 
+            }
+        )
+    })
+}
 function cargar_modelo(){
     var modelo = document.getElementById("desplegable_modelo")
     selectedOptionmodelo = modelo.options[modelo.selectedIndex]
@@ -82,6 +95,10 @@ function cargar_modelo(){
         promptt = "Eres un asistente servicial. Por favor responda las consultas de los usuarios."
     }
     link = document.querySelector(".link").value
+    
+    if(sessionStorage.getItem(nombre+"Mensajes")!= null){
+        cargar_mensajes()
+    }
 
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
@@ -94,8 +111,7 @@ function cargar_modelo(){
                 prompt: promptt,
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
-                link: link,
-                mensajes: sessionStorage.getItem(nombre+"Mensajes")
+                link: link
             }
         )
     })
@@ -114,6 +130,7 @@ function cargar_modelo(){
     })
 }
 function actualizar_entrenar(){
+    console.log(sessionStorage.getItem(nombre+"Temperatura"))
     document.querySelector(".descripcion").value = sessionStorage.getItem(nombre+"Prompt")
     document.querySelector(".miSlider").value = sessionStorage.getItem(nombre+"Temperatura")
     document.querySelector(".slidervalue").textContent = sessionStorage.getItem(nombre+"Temperatura")

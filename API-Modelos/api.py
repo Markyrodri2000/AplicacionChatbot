@@ -24,6 +24,12 @@ http://localhost:8000/entrenar"""
 def MENSAJES():
     return f"""curl http://localhost:8000/mensajes"""
 
+def SET_MENSAJES(mensajes):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{mensajes}' \
+http://localhost:8000/set_mensajes"""
+
 KEY = "./id_rsa"
 
 class SSH:
@@ -52,7 +58,7 @@ ssh = SSH()
 @app.route('/', methods=['POST'])
 def post_data():
     mensaje = request.json['mensaje']
-
+    
     respuesta = ssh.instrucciones(COMMAND_POST(mensaje))
 
     return jsonify({"mensaje": respuesta})
@@ -60,14 +66,22 @@ def post_data():
 @app.route('/entrenar', methods=['POST'])
 def post_data_2():
     req = request.json
-
+    
     respuesta = ssh.instrucciones(ENTRENAR(json.dumps(req)))
 
     return jsonify({"mensaje": respuesta})
 
 @app.route('/get_mensajes', methods=['GET'])
 def post_data_3():
-    return jsonify({"mensajes":ssh.instrucciones(MENSAJES())})
+    return ssh.instrucciones(MENSAJES())
+
+@app.route('/set_mensajes', methods=['POST'])
+def post_data_4():
+    mensajes = request.json['mensajes']
+
+    respuesta = ssh.instrucciones(SET_MENSAJES(mensajes))
+
+    return jsonify({"mensaje": respuesta})
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()
