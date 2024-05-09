@@ -16,14 +16,18 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableBranch
+from langchain_core.messages.base import messages_to_dict
+from langchain_core.messages.utils import messages_from_dict
+
+import json
 
 from googletrans import Translator
 
 class Aplicacion:
 
     def __init__(self):
-        self.crear_modelo("llama2","You are a helpful assistant. Please response to the user queries",0.5,"es","")
-        self.translator = Translator()
+        self.mensajes = ChatMessageHistory()
+        self.crear_modelo("llama2","Eres un asistente servicial. Por favor responda las consultas de los usuarios.",0.5,"es","")
 
     """def cargar_llama2(self):
         login(token = "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")
@@ -125,18 +129,22 @@ class Aplicacion:
         )
 
     def crear_modelo(self,modelo, prompt, temperatura, idioma, link):
+
+        self.idioma = idioma
+
+        self.translator = Translator()
+
+        promp = self.translator.translate(prompt,src=self.idioma,dest='en').text
         
         self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
 
-        self.mensajes = ChatMessageHistory()
-
         if(link == ""):
-            self.simpleChatbot(prompt)
+            self.simpleChatbot(promp)
+            self.simplechatbot = True
 
         else:
-            self.retrieverChatbot(link,prompt)
-
-        self.idioma = idioma
+            self.retrieverChatbot(link,promp)
+            self.simplechatbot = False
 
         self.link = link
 
@@ -150,16 +158,33 @@ class Aplicacion:
 
         response = self.chain.invoke({"messages": self.mensajes.messages})
 
-        respuesta = response['answer']
+        if(self.simplechatbot == False):
+            response = response['answer']
 
-        self.mensajes.add_ai_message(respuesta)
+        self.mensajes.add_ai_message(response)
+
+        return self.translator.translate(response,src='en',dest=self.idioma).text
+
+    def get_chat_history(self):
+        mensajes = {}
+        for i in range(len(self.mensajes.messages)):
+            mensaje = self.mensajes.messages[i].content
+            mensajes["mensajes"+str(i+1)] = mensaje
         
-        print(respuesta)
-        print(type(respuesta))
+        return mensajes
 
-        #return self.translator.translate(respuesta,src='en',dest=self.idioma).text
-        return respuesta
+    def crear_history(self,mensajes):
+        self.mensajes = ChatMessageHistory()
+        par = 0
+        for i in mensajes:
+            if par % 2 == 0:
+                self.mensajes.add_user_message(mensajes[i])
+            else:
+                self.mensajes.add_ai_message(mensajes[i])
+            par = par + 1
 
+        return "Creado"
+        
 modelo = Aplicacion()
 
 app = Flask(__name__)
@@ -185,6 +210,15 @@ def post_data_2():
 
     return res
 
+@app.route('/mensajes', methods=['GET'])
+def post_data_3():
+    return modelo.get_chat_history()
+
+@app.route('/set_mensajes', methods=['POST'])
+def post_data_4():
+    req = request.json
+    
+    return modelo.crear_history(req)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
