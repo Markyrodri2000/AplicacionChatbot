@@ -89,5 +89,8 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
     idioma.selectedIndex = 0
     modelo.selectedIndex = 0
     document.querySelector(".link").value = ""
+    if(sessionStorage.getItem(nombre+"Mensajes")!= null){
+        sessionStorage.removeItem(nombre+"Mensajes")
+    }
     train_entrenamiento()
 })

@@ -1,6 +1,12 @@
 const json_chats = JSON.parse(chats)
 if(json_chats.length>0){
     Object.keys(json_chats).forEach(key => {
+
+        document.querySelector(".modelo").value = json_chats[key].modelo
+        document.querySelector(".temperatura").value = json_chats[key].temperatura
+        document.querySelector(".idioma").value = json_chats[key].idioma
+        document.querySelector(".prompt").textContent = json_chats[key].prompt
+
         const inp = document.createElement("input")
         inp.type = "text"
         inp.name = "bot"
@@ -17,10 +23,27 @@ if(json_chats.length>0){
         editar.classList.add("editar")
         editar.src = "../img/edit.png"
         editar.id = json_chats[key].nombre
+
+        const info = document.createElement("img")
+        info.classList.add("info")
+        info.src = "../img/info.png"
+        info.id = json_chats[key].nombre
+
         
         mis_chat.appendChild(inp)
         mis_chat.appendChild(borrar)
         mis_chat.appendChild(editar)
+        mis_chat.appendChild(info)
+
+        info.addEventListener("click",function() {
+            
+            const chats = document.querySelector(".info_chats")
+            chats.style.display = "block"
+            document.querySelector(".cerrar").addEventListener('click', () => {
+                chats.style.display = "none"
+            })
+            
+        })
 
         borrar.addEventListener("click", function() {
             fetch("http://localhost:3000/borrar_chat",{
