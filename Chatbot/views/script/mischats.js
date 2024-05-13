@@ -1,11 +1,52 @@
 const json_chats = JSON.parse(chats)
 if(json_chats.length>0){
     Object.keys(json_chats).forEach(key => {
+        
+        console.log(json_chats[key].prompt)
+        const span = document.createElement("span")
+        span.classList.add("info_chats")
+        span.id = "Chatbot"+key
 
-        document.querySelector(".modelo").value = json_chats[key].modelo
-        document.querySelector(".temperatura").value = json_chats[key].temperatura
-        document.querySelector(".idioma").value = json_chats[key].idioma
-        document.querySelector(".prompt").textContent = json_chats[key].prompt
+        const tit = document.createElement("h3")
+        tit.textContent = "Información modelo"
+
+        const input_modelo = document.createElement("input")
+        input_modelo.readOnly = true
+        input_modelo.style.type = "text"
+        input_modelo.classList.add("modelo")
+        input_modelo.value = json_chats[key].modelo
+
+        const input_temperatura = document.createElement("input")
+        input_temperatura.readOnly = true
+        input_temperatura.style.type = "text"
+        input_temperatura.classList.add("temperatura")
+        input_temperatura.value = json_chats[key].temperatura
+
+        const input_idioma = document.createElement("input")
+        input_idioma.readOnly = true
+        input_idioma.style.type = "text"
+        input_idioma.classList.add("idioma")
+        input_idioma.value = json_chats[key].idioma
+
+        const input_prompt = document.createElement("textarea")
+        input_prompt.readOnly = true
+        input_prompt.classList.add("prompt")
+        input_prompt.textContent = json_chats[key].prompt
+
+        const cerrar = document.createElement("button")
+        cerrar.classList.add("cerrar")
+        cerrar.textContent = "Cerrar"
+
+        span.appendChild(tit)
+        span.appendChild(input_modelo)
+        span.appendChild(input_temperatura)
+        span.appendChild(input_prompt)
+        span.appendChild(input_idioma)
+        span.appendChild(cerrar)
+
+        const chats = document.querySelector("#MisChats")
+        chats.appendChild(span)
+        
 
         const inp = document.createElement("input")
         inp.type = "text"
@@ -35,14 +76,11 @@ if(json_chats.length>0){
         mis_chat.appendChild(editar)
         mis_chat.appendChild(info)
 
+        cerrar.addEventListener("click", function() {
+            span.style.display = "none"
+        })
         info.addEventListener("click",function() {
-            
-            const chats = document.querySelector(".info_chats")
-            chats.style.display = "block"
-            document.querySelector(".cerrar").addEventListener('click', () => {
-                chats.style.display = "none"
-            })
-            
+            span.style.display = "block"
         })
 
         borrar.addEventListener("click", function() {

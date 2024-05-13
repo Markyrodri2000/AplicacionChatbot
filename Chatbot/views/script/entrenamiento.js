@@ -48,7 +48,6 @@ function train_entrenamiento(){
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
                 link: link,
-                mensajes: []
             }
         )
     })

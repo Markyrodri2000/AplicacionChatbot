@@ -97,6 +97,8 @@ function cargar_modelo(){
     link = document.querySelector(".link").value
     
     if(sessionStorage.getItem(nombre+"Mensajes")!= null){
+        console.log("Entrada")
+        console.log(sessionStorage.getItem(nombre+"Mensajes"))
         cargar_mensajes()
     }
 
@@ -111,7 +113,7 @@ function cargar_modelo(){
                 prompt: promptt,
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
-                link: link
+                link: link,
             }
         )
     })
@@ -130,7 +132,6 @@ function cargar_modelo(){
     })
 }
 function actualizar_entrenar(){
-    console.log(sessionStorage.getItem(nombre+"Temperatura"))
     document.querySelector(".descripcion").value = sessionStorage.getItem(nombre+"Prompt")
     document.querySelector(".miSlider").value = sessionStorage.getItem(nombre+"Temperatura")
     document.querySelector(".slidervalue").textContent = sessionStorage.getItem(nombre+"Temperatura")
