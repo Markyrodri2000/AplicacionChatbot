@@ -27,12 +27,6 @@ def MENSAJES(id):
 -d '{{"id":"{id}"}}' \
 http://localhost:8000/mensajes"""
 
-def SET_MENSAJES(mensajes):
-    return f"""curl -X POST \
--H "Content-Type: application/json" \
--d '{mensajes}' \
-http://localhost:8000/set_mensajes"""
-
 def SET_ID(id,id_antiguo):
     return f"""curl -X POST \
 -H "Content-Type: application/json" \
@@ -104,13 +98,6 @@ def post_data_3():
     id = request.json['id']
     return ssh.instrucciones(MENSAJES(id))
 
-@app.route('/set_mensajes', methods=['POST'])
-def post_data_4():
-    mensajes = request.json['mensajes']
-
-    respuesta = ssh.instrucciones(SET_MENSAJES(mensajes))
-
-    return jsonify({"mensaje": respuesta})
 
 @app.route('/set_id', methods=['POST'])
 def post_data_5():
