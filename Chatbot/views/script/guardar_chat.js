@@ -9,18 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.setItem(nombre+"Idioma","Español")
             sessionStorage.setItem(nombre+"Temperatura","0.5")
             sessionStorage.setItem(nombre+"Prompt","Eres un asistente servicial. Por favor responda las consultas de los usuarios.")
+            sessionStorage.setItem(nombre+"Contador",0)
         }
         else{
+            
             chat.innerHTML = sessionStorage.getItem(nombre)
             const mensajes = document.querySelector(".chat-messages")
             mensajes.scrollTo(0, mensajes.scrollHeight)
             actualizar_form()
             actualizar_entrenar()
-            cargar_modelo()
+            consultar_id()
         }
     }
 })
 
+function consultar_id(){
+    console.log(sessionStorage.getItem(nombre+"Contador"))
+    console.log("Consultar...")
+}
 function actualizar_form(){
     const actual = document.querySelector(".chat-header h2")
     const input_titulo = document.querySelector(".tit")
@@ -72,7 +78,7 @@ function cargar_mensajes(){
         },
         body: JSON.stringify(
             {
-                mensajes:sessionStorage.getItem(nombre+"Mensajes") 
+                mensajes:[]
             }
         )
     })
@@ -95,12 +101,6 @@ function cargar_modelo(){
         promptt = "Eres un asistente servicial. Por favor responda las consultas de los usuarios."
     }
     link = document.querySelector(".link").value
-    
-    if(sessionStorage.getItem(nombre+"Mensajes")!= null){
-        console.log("Entrada")
-        console.log(sessionStorage.getItem(nombre+"Mensajes"))
-        cargar_mensajes()
-    }
 
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
@@ -114,6 +114,7 @@ function cargar_modelo(){
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
                 link: link,
+                id: sessionStorage.getItem(nombre+"Contador")
             }
         )
     })
@@ -129,6 +130,7 @@ function cargar_modelo(){
         sessionStorage.setItem(nombre+"Idioma",selectedOptionidioma.id)
         sessionStorage.setItem(nombre+"Temperatura",temperatura)
         sessionStorage.setItem(nombre+"Prompt",promptt)
+        console.log(sessionStorage.getItem(nombre+"Contador"))
     })
 }
 function actualizar_entrenar(){

@@ -333,11 +333,18 @@ guardar.addEventListener('click', () => {
 
 function guardar_chat(titulo,state){
     
-    fetch("http://localhost:8000/get_mensajes")
+    fetch("http://localhost:8000/get_mensajes",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+            id: sessionStorage.getItem(nombre+ "Contador")
+        })
+    })
     .then(response => response.json())
     .then(messages => {
         var mensajes = JSON.stringify(messages)
-        console.log(mensajes)
         fetch("http://localhost:3000/guardar_chat", {
             method: 'POST',
             headers: {
@@ -356,7 +363,6 @@ function guardar_chat(titulo,state){
         })
         .then(response2 => response2.json())
         .then(data => {
-            console.log(sessionStorage.getItem(nombre + "Temperatura"))
             if (data.respuesta == "Existe") {
                 const existe = document.querySelector(".existente")
                 existe.style.display = "block"
@@ -404,6 +410,44 @@ function guardar_chat(titulo,state){
                 setTimeout(() => {
                     guardar_desp.style.display = "none"
                 }, 1000)
+                
+                fetch("http://localhost:3000/get_id",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify({
+                        nombre: titulo,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    sessionStorage.setItem(nombre+"Contador",String(data.id))
+
+                    var modelo = document.getElementById("desplegable_modelo")
+                    var selectedOptionmodelo = modelo.options[modelo.selectedIndex].value
+
+                    var idioma = document.getElementById("desplegable_idioma")
+                    var selectedOptionidioma = idioma.options[idioma.selectedIndex].value
+
+                    fetch("http://localhost:8000/entrenar",{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(
+                            {
+                                temperatura: sessionStorage.getItem(nombre + "Temperatura"),
+                                prompt: sessionStorage.getItem(nombre + "Prompt"),
+                                idioma: selectedOptionidioma,
+                                modelo: selectedOptionmodelo,
+                                link: "",
+                                id: sessionStorage.getItem(nombre+"Contador")
+                            }
+                        )
+                    })
+                })
                 return true
             }
         })
@@ -423,8 +467,5 @@ restablecer_chat.addEventListener("click", function(event) {
     if(sessionStorage.getItem(nombre+"session")=== "activa"){
         const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
         sessionStorage.setItem(nombre,chat_guardar)
-        if(sessionStorage.getItem(nombre+"Mensajes")!= null){
-            sessionStorage.removeItem(nombre+"Mensajes")
-        }
     }
 });

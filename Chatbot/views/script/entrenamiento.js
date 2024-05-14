@@ -35,7 +35,7 @@ function train_entrenamiento(){
         promptt = "Eres un asistente servicial. Por favor responda las consultas de los usuarios."
     }
     link = document.querySelector(".link").value
-
+    
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
         headers: {
@@ -48,6 +48,7 @@ function train_entrenamiento(){
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
                 link: link,
+                id: sessionStorage.getItem(nombre+"Contador")
             }
         )
     })
@@ -88,8 +89,5 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
     idioma.selectedIndex = 0
     modelo.selectedIndex = 0
     document.querySelector(".link").value = ""
-    if(sessionStorage.getItem(nombre+"Mensajes")!= null){
-        sessionStorage.removeItem(nombre+"Mensajes")
-    }
     train_entrenamiento()
 })

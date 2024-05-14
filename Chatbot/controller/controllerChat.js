@@ -190,7 +190,28 @@ function guardar_chat(req,res){
         });
     });
 }
-
+function getId(req,res){
+    const usuario_email = req.session.email
+    const nombre = req.body.nombre
+    
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.log('Error al conectar a la base de datos');
+        }
+        else{
+            conn.query(queries.get_id, [nombre,usuario_email], (err, rows) => {
+                if (err) {
+                    console.log('Error al get id en la base de datos');
+                    res.redirect("/login")
+                }
+                else{
+                    console.log("Id consultado correctamente")
+                    res.send({id: rows[0].id})
+                }
+            });
+        }
+    })
+}
 function editar_chats(req,res){
     const usuario_email = req.session.email
     const nombre = req.body.nombre
@@ -207,7 +228,7 @@ function editar_chats(req,res){
                 }
                 else{
                     console.log("Código consultado correctamente")
-                    res.send({nombre: req.session.nombre,codigo: rows[0].codigo,modelo: rows[0].modelo,temperatura:rows[0].temperatura,prompt:rows[0].prompt,idioma:rows[0].idioma,mensajes: rows[0].mensajes})
+                    res.send({id: req.session.id, nombre: req.session.nombre,codigo: rows[0].codigo,modelo: rows[0].modelo,temperatura:rows[0].temperatura,prompt:rows[0].prompt,idioma:rows[0].idioma,mensajes: rows[0].mensajes})
                 }
             });
         }
@@ -241,6 +262,7 @@ const chat = {
     Chats,
     guardar_chat,
     editar_chats,
-    borrar_chat
+    borrar_chat,
+    getId
 }
 export default chat

@@ -26,6 +26,7 @@ router.post('/validar_token',usuario.ValidarToken)
 router.post('/guardar_chat',chat.guardar_chat)
 router.post('/editar_chat', chat.editar_chats)
 router.post('/borrar_chat', chat.borrar_chat)
+router.post('/get_id',chat.getId)
 
 //Servir Widget
 router.post('/widget',(chat.Widget))

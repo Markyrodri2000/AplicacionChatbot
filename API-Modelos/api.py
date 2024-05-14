@@ -9,10 +9,10 @@ CORS(app)
 HOSTNAME = '52.143.134.115'
 USERNAME = 'azureuser'
 PORT = 50000
-def COMMAND_POST(mensaje):
+def COMMAND_POST(mensaje,id):
     return f"""curl -X POST \
 -H "Content-Type: application/json" \
--d '{{"mensaje":"{mensaje}"}}' \
+-d '{{"mensaje":"{mensaje}","id":"{id}"}}' \
 http://localhost:8000/responder"""
 
 def ENTRENAR(objeto):
@@ -21,8 +21,11 @@ def ENTRENAR(objeto):
 -d '{objeto}' \
 http://localhost:8000/entrenar"""
 
-def MENSAJES():
-    return f"""curl http://localhost:8000/mensajes"""
+def MENSAJES(id):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{{"id":"{id}"}}' \
+http://localhost:8000/mensajes"""
 
 def SET_MENSAJES(mensajes):
     return f"""curl -X POST \
@@ -58,8 +61,9 @@ ssh = SSH()
 @app.route('/', methods=['POST'])
 def post_data():
     mensaje = request.json['mensaje']
+    id = request.json['id']
     
-    respuesta = ssh.instrucciones(COMMAND_POST(mensaje))
+    respuesta = ssh.instrucciones(COMMAND_POST(mensaje,id))
 
     return jsonify({"mensaje": respuesta})
 
@@ -71,9 +75,10 @@ def post_data_2():
 
     return jsonify({"mensaje": respuesta})
 
-@app.route('/get_mensajes', methods=['GET'])
+@app.route('/get_mensajes', methods=['POST'])
 def post_data_3():
-    return ssh.instrucciones(MENSAJES())
+    id = request.json['id']
+    return ssh.instrucciones(MENSAJES(id))
 
 @app.route('/set_mensajes', methods=['POST'])
 def post_data_4():
