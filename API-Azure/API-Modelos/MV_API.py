@@ -20,14 +20,15 @@ from langchain_core.messages.base import messages_to_dict
 from langchain_core.messages.utils import messages_from_dict
 
 import json
+import copy
 
 from googletrans import Translator
 
 class Aplicacion:
 
     def __init__(self):
-        self.mensajes = ChatMessageHistory()
-        self.crear_modelo("llama2","Eres un asistente servicial. Por favor responda las consultas de los usuarios.",0.5,"es","")
+        self.chats = {}
+        self.crear_modelo("0", "llama2", "Eres un asistente servicial. Por favor responda las consultas de los usuarios.", 0.5, "es", "")
 
     """def cargar_llama2(self):
         login(token = "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")
@@ -76,8 +77,8 @@ class Aplicacion:
                 MessagesPlaceholder(variable_name="messages"),
             ]
         )
-        
-        self.chain = prompt | self.llm
+        chain = prompt | self.llm
+        return chain
 
     def retrieverChatbot(self,link,instrucciones):
         print(link)
@@ -128,50 +129,110 @@ class Aplicacion:
             answer=document_chain,
         )
 
-    def crear_modelo(self,modelo, prompt, temperatura, idioma, link):
+    def borrar(self,id):
+        self.chats.pop(id)
+        print(self.chats)
+        return "Borrado"
+    
+    def restablecer_chat(self,id):
+        self.chats[id]["mensajes"] = ChatMessageHistory()
 
-        self.idioma = idioma
+        self.abierto(id)
+        return "Restablecido"
+    
+    def abierto(self,id):
+        self.chats["0"] = copy.deepcopy(self.chats[id])
 
-        self.translator = Translator()
+        print(id)
+        print(self.chats["0"]["mensajes"])
+        print(self.chats["0"]["prompt"])
+        return "Abierto"
+    
+    def set_id(self,id):
+        self.chats[id] = copy.deepcopy(self.chats["0"])
 
-        promp = self.translator.translate(prompt,src=self.idioma,dest='en').text
-        
-        self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
+        print(self.chats)
+        return "Creado"
 
-        if(link == ""):
-            self.simpleChatbot(promp)
-            self.simplechatbot = True
+    def crear_modelo(self, id, modelo, prompt, temperatura, idioma, link):
+
+        if(self.chats.get(id) is None):
+            mensajes = ChatMessageHistory()
+
+            self.translator = Translator()
+
+            promp = self.translator.translate(prompt,src=idioma,dest='en').text
+            
+            self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
+
+            if(link == ""):
+                chain = self.simpleChatbot(promp)
+                simplechatbot = True
+
+            else:
+                chain = self.retrieverChatbot(link,promp)
+                simplechatbot = False
+
+            self.link = link
+            
+            chat = {
+                "chain": chain,
+                "mensajes": mensajes,
+                "idioma": idioma,
+                "simple": simplechatbot,
+                "temperatura": temperatura,
+                "prompt": prompt,
+                "modelo": modelo 
+            }
+
+            self.chats[id] = chat
 
         else:
-            self.retrieverChatbot(link,promp)
-            self.simplechatbot = False
-
-        self.link = link
+            self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
+            promp = self.translator.translate(prompt,dest='en').text
+            print(promp)
+            chain = self.simpleChatbot(promp)
+            self.chats["0"]["modelo"] = modelo
+            self.chats["0"]["chain"] = chain
+            self.chats["0"]["idioma"] = idioma
+            self.chats["0"]["temperatura"] = temperatura
+            self.chats["0"]["prompt"] = prompt
+            
+        print(self.chats)
 
         return "Creado"
 
     def responder(self,mensaje):
+        
+        mis = self.translator.translate(mensaje,dest='en').text
 
-        mis = self.translator.translate(mensaje,src=self.idioma,dest='en').text
+        self.chats["0"]["mensajes"].add_user_message(mis)
 
-        self.mensajes.add_user_message(mis)
+        response = self.chats["0"]["chain"].invoke({"messages": self.chats["0"]["mensajes"].messages})
 
-        response = self.chain.invoke({"messages": self.mensajes.messages})
-
-        if(self.simplechatbot == False):
+        if(self.chats["0"]["simple"] == False):
             response = response['answer']
 
-        self.mensajes.add_ai_message(response)
+        self.chats["0"]["mensajes"].add_ai_message(response)
 
-        return self.translator.translate(response,src='en',dest=self.idioma).text
+        print(self.chats["0"]["mensajes"].messages)
+        print(self.translator.translate(response,src='en',dest=self.chats["0"]["idioma"]).text)
 
-    def get_chat_history(self):
-        mensajes = {}
-        for i in range(len(self.mensajes.messages)):
-            mensaje = self.mensajes.messages[i].content
-            mensajes["mensajes"+str(i+1)] = mensaje
-        
-        return mensajes
+        return self.translator.translate(response,src='en',dest=self.chats["0"]["idioma"]).text
+
+    def get_chat_history(self,id):
+        id = str(id)
+        print(self.chats)
+        if(self.chats.get(id) is not None):
+            mensajes = {}
+            for i in range(len(self.chats[id]["mensajes"].messages)):
+                mensaje = self.chats[id]["mensajes"].messages[i].content
+                mensajes["mensajes"+str(i+1)] = mensaje
+            
+            return mensajes
+        else:
+            print("Chat no encontrado")
+            return "Chat no encontrado"
 
     def crear_history(self,mensajes):
         self.mensajes = ChatMessageHistory()
@@ -205,20 +266,42 @@ def post_data_2():
     prompt = request.json['prompt']
     idioma = request.json['idioma']
     link = request.json['link']
+    id = request.json['id']
 
-    res = modelo.crear_modelo(nombre_modelo, prompt, temperatura, idioma, link)
+    res = modelo.crear_modelo(id,nombre_modelo, prompt, temperatura, idioma, link)
 
     return res
 
-@app.route('/mensajes', methods=['GET'])
+@app.route('/mensajes', methods=['POST'])
 def post_data_3():
-    return modelo.get_chat_history()
+    id = request.json['id']
+    return modelo.get_chat_history(id)
 
 @app.route('/set_mensajes', methods=['POST'])
 def post_data_4():
     req = request.json
     
     return modelo.crear_history(req)
+
+@app.route('/set_id', methods=['POST'])
+def post_data_5():
+    id = request.json['id']
+    return modelo.set_id(id)
+
+@app.route('/abierto', methods=['POST'])
+def post_data_6():
+    id = request.json['id']
+    return modelo.abierto(id)
+
+@app.route('/borrar', methods=['POST'])
+def post_data_7():
+    id = request.json['id']
+    return modelo.borrar(id)
+
+@app.route('/restablecer_chat', methods=['POST'])
+def post_data_8():
+    id = request.json['id']
+    return modelo.restablecer_chat(id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)

@@ -33,6 +33,30 @@ def SET_MENSAJES(mensajes):
 -d '{mensajes}' \
 http://localhost:8000/set_mensajes"""
 
+def SET_ID(id,id_antiguo):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{{"id":"{id}","id_antiguo":"{id_antiguo}"}}' \
+http://localhost:8000/set_id"""
+
+def ABIERTO(id):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{{"id":"{id}"}}' \
+http://localhost:8000/abierto"""
+
+def BORRAR(id):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{{"id":"{id}"}}' \
+http://localhost:8000/borrar"""
+
+def RESTABLECER_CHAT(id):
+    return f"""curl -X POST \
+-H "Content-Type: application/json" \
+-d '{{"id":"{id}"}}' \
+http://localhost:8000/restablecer_chat"""
+
 KEY = "./id_rsa"
 
 class SSH:
@@ -87,6 +111,28 @@ def post_data_4():
     respuesta = ssh.instrucciones(SET_MENSAJES(mensajes))
 
     return jsonify({"mensaje": respuesta})
+
+@app.route('/set_id', methods=['POST'])
+def post_data_5():
+    id = request.json['id']
+    id_antiguo = request.json['id_antiguo']
+    return ssh.instrucciones(SET_ID(id,id_antiguo))
+
+@app.route('/abierto', methods=['POST'])
+def post_data_6():
+    id = request.json['id']
+    return ssh.instrucciones(ABIERTO(id))
+
+@app.route('/borrar', methods=['POST'])
+def post_data_7():
+    id = request.json['id']
+    return ssh.instrucciones(BORRAR(id))
+
+@app.route('/restablecer_chat', methods=['POST'])
+def post_data_8():
+    id = request.json['id']
+    return ssh.instrucciones(RESTABLECER_CHAT(id))
+
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()

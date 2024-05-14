@@ -98,6 +98,17 @@ if(json_chats.length>0){
             .then( data => {
                 sessionStorage.removeItem(data.nombre)
                 sessionStorage.removeItem(data.nombre+"session")
+                fetch("http://localhost:8000/borrar",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            id:sessionStorage.getItem(data.nombre+"Contador")
+                        }
+                    )
+                })
                 window.location.href = "http://localhost:3000/chats";
             })
         })
@@ -130,6 +141,17 @@ if(json_chats.length>0){
                 sessionStorage.setItem(data.nombre+"Prompt",data.prompt)
                 sessionStorage.setItem(data.nombre+"Idioma",data.idioma)
                 sessionStorage.setItem(data.nombre+"Contador",data.id)
+                fetch("http://localhost:8000/abierto",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            id:sessionStorage.getItem(data.nombre+"Contador")
+                        }
+                    )
+                })
                 window.location.href = "http://localhost:3000/"
             })
         })

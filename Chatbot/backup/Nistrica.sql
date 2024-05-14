@@ -66,14 +66,13 @@ DROP TABLE IF EXISTS `chats`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chats` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(2000) NOT NULL,
+  `codigo` varchar(6000) NOT NULL,
   `usuario_email` varchar(255) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `modelo` varchar(10) NOT NULL,
   `temperatura` float(4) NOT NULL,
   `prompt` varchar(1000) NOT NULL,
   `idioma` varchar(10) NOT NULL,
-  `mensajes` varchar(6000) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_email` (`usuario_email`),
   CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`usuario_email`) REFERENCES `users` (`email`)

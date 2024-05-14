@@ -358,7 +358,6 @@ function guardar_chat(titulo,state){
                 temperatura: sessionStorage.getItem(nombre + "Temperatura"),
                 promptt: sessionStorage.getItem(nombre + "Prompt"),
                 idioma: sessionStorage.getItem(nombre + "Idioma"),
-                mensajes: mensajes
             })
         })
         .then(response2 => response2.json())
@@ -422,27 +421,17 @@ function guardar_chat(titulo,state){
                 })
                 .then(response => response.json())
                 .then(data => {
-                    
+                    const id_antiguo = sessionStorage.getItem(nombre+"Contador")
                     sessionStorage.setItem(nombre+"Contador",String(data.id))
 
-                    var modelo = document.getElementById("desplegable_modelo")
-                    var selectedOptionmodelo = modelo.options[modelo.selectedIndex].value
-
-                    var idioma = document.getElementById("desplegable_idioma")
-                    var selectedOptionidioma = idioma.options[idioma.selectedIndex].value
-
-                    fetch("http://localhost:8000/entrenar",{
+                    fetch("http://localhost:8000/set_id",{
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(
                             {
-                                temperatura: sessionStorage.getItem(nombre + "Temperatura"),
-                                prompt: sessionStorage.getItem(nombre + "Prompt"),
-                                idioma: selectedOptionidioma,
-                                modelo: selectedOptionmodelo,
-                                link: "",
+                                id_antiguo: id_antiguo,
                                 id: sessionStorage.getItem(nombre+"Contador")
                             }
                         )
@@ -468,4 +457,17 @@ restablecer_chat.addEventListener("click", function(event) {
         const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
         sessionStorage.setItem(nombre,chat_guardar)
     }
+
+    fetch("http://localhost:8000/restablecer_chat",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                id:sessionStorage.getItem(nombre+"Contador")
+            }
+        )
+    })
+
 });

@@ -126,7 +126,6 @@ function guardar_chat(req,res){
     const idioma = req.body.idioma
     const temperatura = req.body.temperatura
     const prompt = req.body.promptt
-    const mensajes = req.body.mensajes
 
     const valores = {
         codigo,
@@ -135,8 +134,7 @@ function guardar_chat(req,res){
         modelo,
         idioma,
         temperatura,
-        prompt,
-        mensajes
+        prompt
     }
     const sobreescribir = {
         codigo,
@@ -144,8 +142,7 @@ function guardar_chat(req,res){
         modelo,
         idioma,
         temperatura,
-        prompt,
-        mensajes
+        prompt
     }
     req.getConnection((err, conn) => {
         if (err) {
@@ -228,7 +225,7 @@ function editar_chats(req,res){
                 }
                 else{
                     console.log("Código consultado correctamente")
-                    res.send({id: req.session.id, nombre: req.session.nombre,codigo: rows[0].codigo,modelo: rows[0].modelo,temperatura:rows[0].temperatura,prompt:rows[0].prompt,idioma:rows[0].idioma,mensajes: rows[0].mensajes})
+                    res.send({id: rows[0].id, nombre: req.session.nombre,codigo: rows[0].codigo,modelo: rows[0].modelo,temperatura:rows[0].temperatura,prompt:rows[0].prompt,idioma:rows[0].idioma})
                 }
             });
         }
