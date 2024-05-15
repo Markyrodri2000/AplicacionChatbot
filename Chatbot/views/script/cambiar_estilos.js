@@ -345,6 +345,10 @@ function guardar_chat(titulo,state){
     .then(response => response.json())
     .then(messages => {
         var mensajes = JSON.stringify(messages)
+        const links = ""
+        if(sessionStorage.getItem(nombre + "Links")!= null){
+            links = sessionStorage.getItem(nombre + "Links")
+        }
         fetch("http://localhost:3000/guardar_chat", {
             method: 'POST',
             headers: {
@@ -358,6 +362,7 @@ function guardar_chat(titulo,state){
                 temperatura: sessionStorage.getItem(nombre + "Temperatura"),
                 promptt: sessionStorage.getItem(nombre + "Prompt"),
                 idioma: sessionStorage.getItem(nombre + "Idioma"),
+                links: links,
             })
         })
         .then(response2 => response2.json())

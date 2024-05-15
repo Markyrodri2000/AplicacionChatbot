@@ -76,3 +76,13 @@
     background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
     z-index: 9999; /* Asegurar que esté por encima de todos los demás elementos */
 }
+
+.añadirLink,
+.quitarLink{
+    width: 20px;
+    height: 20px;
+    float:left;
+    margin-top:5px;
+    margin-right: 40px;
+}
+

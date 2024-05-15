@@ -73,6 +73,7 @@ CREATE TABLE `chats` (
   `temperatura` float(4) NOT NULL,
   `prompt` varchar(1000) NOT NULL,
   `idioma` varchar(10) NOT NULL,
+  `links` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_email` (`usuario_email`),
   CONSTRAINT `chats_ibfk_1` FOREIGN KEY (`usuario_email`) REFERENCES `users` (`email`)

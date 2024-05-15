@@ -9,6 +9,8 @@ from langchain.prompts import (
 )
 from langchain.memory import ChatMessageHistory
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders.recursive_url_loader import RecursiveUrlLoader
+from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -81,8 +83,13 @@ class Aplicacion:
         return chain
 
     def retrieverChatbot(self,link,instrucciones):
-        print(link)
-        loader = WebBaseLoader(link)
+        if(len(link)>1):
+            print("Unstructured")
+            loader = UnstructuredURLLoader(link)
+        else:
+            print("Recursive")
+            loader = RecursiveUrlLoader(link[0])
+
         data = loader.load() 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
         all_splits = text_splitter.split_documents(data)
@@ -123,15 +130,15 @@ class Aplicacion:
 
         document_chain = create_stuff_documents_chain(self.llm, prompt)
 
-        self.chain = RunnablePassthrough.assign(
+        chain = RunnablePassthrough.assign(
             context=query_transforming_retriever_chain,
         ).assign(
             answer=document_chain,
         )
+        return chain
 
     def borrar(self,id):
         self.chats.pop(id)
-        print(self.chats)
         return "Borrado"
     
     def restablecer_chat(self,id):
@@ -142,10 +149,6 @@ class Aplicacion:
     
     def abierto(self,id):
         self.chats["0"] = copy.deepcopy(self.chats[id])
-
-        print(id)
-        print(self.chats["0"]["mensajes"])
-        print(self.chats["0"]["prompt"])
         return "Abierto"
     
     def set_id(self,id):
@@ -165,15 +168,8 @@ class Aplicacion:
             
             self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
 
-            if(link == ""):
-                chain = self.simpleChatbot(promp)
-                simplechatbot = True
-
-            else:
-                chain = self.retrieverChatbot(link,promp)
-                simplechatbot = False
-
-            self.link = link
+            chain = self.simpleChatbot(promp)
+            simplechatbot = True
             
             chat = {
                 "chain": chain,
@@ -182,7 +178,7 @@ class Aplicacion:
                 "simple": simplechatbot,
                 "temperatura": temperatura,
                 "prompt": prompt,
-                "modelo": modelo 
+                "modelo": modelo,
             }
 
             self.chats[id] = chat
@@ -190,13 +186,22 @@ class Aplicacion:
         else:
             self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
             promp = self.translator.translate(prompt,dest='en').text
-            print(promp)
-            chain = self.simpleChatbot(promp)
+            
+            if(len(link) > 0):
+                chain = self.retrieverChatbot(link,promp)
+                simplechatbot = False
+
+            else:
+                chain = self.simpleChatbot(promp)
+                simplechatbot = True
+
             self.chats["0"]["modelo"] = modelo
             self.chats["0"]["chain"] = chain
             self.chats["0"]["idioma"] = idioma
+            self.chats["0"]["simple"] = simplechatbot
             self.chats["0"]["temperatura"] = temperatura
             self.chats["0"]["prompt"] = prompt
+            self.chats["0"]["link"] = link
             
         print(self.chats)
 
@@ -233,18 +238,6 @@ class Aplicacion:
         else:
             print("Chat no encontrado")
             return "Chat no encontrado"
-
-    def crear_history(self,mensajes):
-        self.mensajes = ChatMessageHistory()
-        par = 0
-        for i in mensajes:
-            if par % 2 == 0:
-                self.mensajes.add_user_message(mensajes[i])
-            else:
-                self.mensajes.add_ai_message(mensajes[i])
-            par = par + 1
-
-        return "Creado"
         
 modelo = Aplicacion()
 
@@ -276,12 +269,6 @@ def post_data_2():
 def post_data_3():
     id = request.json['id']
     return modelo.get_chat_history(id)
-
-@app.route('/set_mensajes', methods=['POST'])
-def post_data_4():
-    req = request.json
-    
-    return modelo.crear_history(req)
 
 @app.route('/set_id', methods=['POST'])
 def post_data_5():

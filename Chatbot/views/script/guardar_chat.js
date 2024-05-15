@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.setItem(nombre+"Temperatura","0.5")
             sessionStorage.setItem(nombre+"Prompt","Eres un asistente servicial. Por favor responda las consultas de los usuarios.")
             sessionStorage.setItem(nombre+"Contador",0)
+            sessionStorage.setItem(nombre+"Links","")
         }
         else{
             
@@ -80,6 +81,21 @@ function actualizar_entrenar(){
 
     var modelo = document.querySelector("#desplegable_modelo #"+sessionStorage.getItem(nombre+"Modelo"))
     modelo.selected = true
+
+    let linkTexts = sessionStorage.getItem(nombre+"Links").split(',')
+    const link = document.querySelector(".link")
+    link.value = linkTexts[0]
+
+    const labels = document.querySelector(".links")
+
+    for (let i = 1; i < linkTexts.length; i++) {
+        let newInput = document.createElement('input')
+        newInput.type = 'text'
+        newInput.classList.add('link')
+        newInput.value = linkTexts[i]
+        labels.appendChild(newInput)
+    }
+
 }
 
 function rgbaToHex(rgbaColor) {

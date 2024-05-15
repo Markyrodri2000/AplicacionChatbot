@@ -34,7 +34,9 @@ function train_entrenamiento(){
     if(promptt == ""){
         promptt = "Eres un asistente servicial. Por favor responda las consultas de los usuarios."
     }
-    link = document.querySelector(".link").value
+    link = document.querySelectorAll(".link")
+    let linkTexts = Array.from(link).map(link => link.value)
+    let varcharString = linkTexts.join(',')
     
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
@@ -47,7 +49,7 @@ function train_entrenamiento(){
                 prompt: promptt,
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
-                link: link,
+                link: linkTexts,
                 id: sessionStorage.getItem(nombre+"Contador")
             }
         )
@@ -64,6 +66,7 @@ function train_entrenamiento(){
         sessionStorage.setItem(nombre+"Idioma",selectedOptionidioma.id)
         sessionStorage.setItem(nombre+"Temperatura",temperatura)
         sessionStorage.setItem(nombre+"Prompt",promptt)
+        sessionStorage.setItem(nombre+"Links",varcharString)
     })
 }
 const entrenamiento = document.querySelector(".train");
@@ -88,6 +91,48 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
     document.querySelector(".descripcion").value = "You are a helpful assistant. Please response to the user queries"
     idioma.selectedIndex = 0
     modelo.selectedIndex = 0
-    document.querySelector(".link").value = ""
+    let links = document.querySelectorAll(".link")
+    links.forEach(link => {
+        link.value = ""
+    })
+
     train_entrenamiento()
 })
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    let selectedInput = null
+
+    function addInputEventListener(input) {
+        input.addEventListener('click', () => {
+            selectedInput = input
+            let inputs = document.querySelectorAll('.entrenamiento input')
+            inputs.forEach(i => i.classList.remove('selected'))
+            input.classList.add('selected')
+        })
+    }
+
+    let inputs = document.querySelectorAll('.entrenamiento input')
+    inputs.forEach(input => addInputEventListener(input))
+
+    let deleteImg = document.querySelector('.quitarLink')
+    deleteImg.addEventListener('click', () => {
+        if (selectedInput) {
+            selectedInput.remove()
+            selectedInput = null
+        } else {
+            console.log('No input selected')
+        }
+    })
+
+    let addImg = document.querySelector('.añadirLink')
+    addImg.addEventListener('click', () => {
+        let newInput = document.createElement('input')
+        newInput.type = 'text'
+        newInput.classList.add("link")
+        newInput.placeholder = 'Nuevo enlace'
+        document.querySelector('.links').appendChild(newInput)
+        addInputEventListener(newInput)
+    })
+})
+
+

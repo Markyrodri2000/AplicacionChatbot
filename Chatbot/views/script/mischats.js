@@ -2,7 +2,6 @@ const json_chats = JSON.parse(chats)
 if(json_chats.length>0){
     Object.keys(json_chats).forEach(key => {
         
-        console.log(json_chats[key].prompt)
         const span = document.createElement("span")
         span.classList.add("info_chats")
         span.id = "Chatbot"+key
@@ -42,6 +41,17 @@ if(json_chats.length>0){
         span.appendChild(input_temperatura)
         span.appendChild(input_prompt)
         span.appendChild(input_idioma)
+
+        let linkTexts = json_chats[key].links.split(',')
+        linkTexts.forEach(link => {
+            const input_link = document.createElement("input")
+            input_link.readOnly = true
+            input_link.style.type = "text"
+            input_link.classList.add("link")
+            input_link.value = link
+            span.appendChild(input_link)
+        })
+
         span.appendChild(cerrar)
 
         const chats = document.querySelector("#MisChats")
@@ -141,6 +151,9 @@ if(json_chats.length>0){
                 sessionStorage.setItem(data.nombre+"Prompt",data.prompt)
                 sessionStorage.setItem(data.nombre+"Idioma",data.idioma)
                 sessionStorage.setItem(data.nombre+"Contador",data.id)
+                console.log(data.links)
+                sessionStorage.setItem(data.nombre+"Links",data.links)
+
                 fetch("http://localhost:8000/abierto",{
                     method: 'POST',
                     headers: {

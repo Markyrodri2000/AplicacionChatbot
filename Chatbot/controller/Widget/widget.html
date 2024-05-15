@@ -186,6 +186,7 @@
     }
 
     function responder(mis){
+        const mensajes = document.querySelector(".chat-messages")
         const chatLi = document.createElement("li")
         chatLi.classList.add("servidor")
         chatLi.innerHTML = `
@@ -197,22 +198,32 @@
         `
         const col_serv = document.querySelector(".servidor").style.backgroundColor
         chatLi.style.backgroundColor = col_serv
+        
         mensajes.appendChild(chatLi)
-        mensajes_grid.scrollTo(0, mensajes.scrollHeight)
+        mensajes.scrollTo(0, mensajes.scrollHeight)
+
+        
         fetch("http://localhost:8000/",{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(
-                {mensaje: mis}
+                {
+                    mensaje: mis,
+                    id: sessionStorage.getItem(nombre+"Contador")
+                }
             )
         })
         .then(response => response.json())
         .then(data => {
             let chatContent =  `<p>${data.mensaje}</p>`
             chatLi.innerHTML = chatContent
-            mensajes_grid.scrollTo(0, mensajes.scrollHeight)
+            mensajes.scrollTo(0, mensajes.scrollHeight)
+            if(sessionStorage.getItem(nombre+"session")=== "activa"){
+                const chat_guardar = document.querySelector(".actualizar_pagina").innerHTML
+                sessionStorage.setItem(nombre,chat_guardar)
+            }
             //añadir_mensaje(["servidor",data.mensaje])
         })
         .catch(error => {
