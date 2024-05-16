@@ -51,6 +51,8 @@ def RESTABLECER_CHAT(id):
 -d '{{"id":"{id}"}}' \
 http://localhost:8000/restablecer_chat"""
 
+
+
 KEY = "./id_rsa"
 
 class SSH:
@@ -119,7 +121,6 @@ def post_data_7():
 def post_data_8():
     id = request.json['id']
     return ssh.instrucciones(RESTABLECER_CHAT(id))
-
 
 def shutdown_session(exception=None):
     ssh.terminar_conexion()

@@ -127,6 +127,7 @@ function guardar_chat(req,res){
     const temperatura = req.body.temperatura
     const prompt = req.body.promptt
     const links = req.body.links
+    console.log(links)
 
     const valores = {
         codigo,

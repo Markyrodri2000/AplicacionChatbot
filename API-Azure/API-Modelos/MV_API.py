@@ -30,7 +30,7 @@ class Aplicacion:
 
     def __init__(self):
         self.chats = {}
-        self.crear_modelo("0", "llama2", "Eres un asistente servicial. Por favor responda las consultas de los usuarios.", 0.5, "es", "")
+        self.crear_modelo("0", "llama2", "Eres un asistente servicial. Por favor responda las consultas de los usuarios.", 0.5, "es", "", False)
 
     """def cargar_llama2(self):
         login(token = "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")
@@ -157,7 +157,8 @@ class Aplicacion:
         print(self.chats)
         return "Creado"
 
-    def crear_modelo(self, id, modelo, prompt, temperatura, idioma, link):
+
+    def crear_modelo(self, id, modelo, prompt, temperatura, idioma, link,restablecer):
 
         if(self.chats.get(id) is None):
             mensajes = ChatMessageHistory()
@@ -187,7 +188,7 @@ class Aplicacion:
             self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
             promp = self.translator.translate(prompt,dest='en').text
             
-            if(len(link) > 0):
+            if(len(link) > 0 and link[0] != ''):
                 chain = self.retrieverChatbot(link,promp)
                 simplechatbot = False
 
@@ -202,6 +203,9 @@ class Aplicacion:
             self.chats["0"]["temperatura"] = temperatura
             self.chats["0"]["prompt"] = prompt
             self.chats["0"]["link"] = link
+
+            if(restablecer == True):
+                self.chats["0"]["mensajes"] = ChatMessageHistory()
             
         print(self.chats)
 
@@ -260,8 +264,9 @@ def post_data_2():
     idioma = request.json['idioma']
     link = request.json['link']
     id = request.json['id']
+    restablecer = request.json['restablecer']
 
-    res = modelo.crear_modelo(id,nombre_modelo, prompt, temperatura, idioma, link)
+    res = modelo.crear_modelo(id,nombre_modelo, prompt, temperatura, idioma, link, restablecer)
 
     return res
 

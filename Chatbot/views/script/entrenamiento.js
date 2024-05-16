@@ -23,7 +23,7 @@ modelo.addEventListener("change", function() {
     selectedValuemodelo = selectedOptionmodelo.value
 })
 
-function train_entrenamiento(){
+function train_entrenamiento(restablecer){
     const progressbar = document.querySelector(".progressbar")
     progressbar.style.display="block"
     document.addEventListener('click', bloquearClick, true)
@@ -50,7 +50,8 @@ function train_entrenamiento(){
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
                 link: linkTexts,
-                id: sessionStorage.getItem(nombre+"Contador")
+                id: sessionStorage.getItem(nombre+"Contador"),
+                restablecer: restablecer
             }
         )
     })
@@ -71,7 +72,7 @@ function train_entrenamiento(){
 }
 const entrenamiento = document.querySelector(".train");
 entrenamiento.addEventListener("click",() => {
-    train_entrenamiento()
+    train_entrenamiento(false)
 })
 
 function bloquearClick(evento) {
@@ -85,6 +86,7 @@ function bloquearTeclado(evento) {
     evento.preventDefault();
 }
 
+
 const restart = document.querySelector("#restar_model").addEventListener('click',() => {
     document.querySelector(".miSlider").value = 0.5
     document.querySelector(".slidervalue").textContent = 0.5
@@ -92,11 +94,12 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
     idioma.selectedIndex = 0
     modelo.selectedIndex = 0
     let links = document.querySelectorAll(".link")
-    links.forEach(link => {
-        link.value = ""
-    })
+    links[0].value = ""
+    for (let i = 1; i < links.length; i++) {
+        links[i].remove();
+    }
 
-    train_entrenamiento()
+    train_entrenamiento(true)
 })
 
 document.addEventListener('DOMContentLoaded', (event) => {

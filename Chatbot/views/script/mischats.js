@@ -43,14 +43,16 @@ if(json_chats.length>0){
         span.appendChild(input_idioma)
 
         let linkTexts = json_chats[key].links.split(',')
-        linkTexts.forEach(link => {
-            const input_link = document.createElement("input")
-            input_link.readOnly = true
-            input_link.style.type = "text"
-            input_link.classList.add("link")
-            input_link.value = link
-            span.appendChild(input_link)
-        })
+        if(linkTexts[0] !== ''){
+            linkTexts.forEach(link => {
+                const input_link = document.createElement("input")
+                input_link.readOnly = true
+                input_link.style.type = "text"
+                input_link.classList.add("link")
+                input_link.value = link
+                span.appendChild(input_link)
+            })   
+        }
 
         span.appendChild(cerrar)
 

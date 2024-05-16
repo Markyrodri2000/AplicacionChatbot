@@ -333,6 +333,7 @@ guardar.addEventListener('click', () => {
 
 function guardar_chat(titulo,state){
     
+    let links = document.querySelectorAll(".link")
     fetch("http://localhost:8000/get_mensajes",{
         method: 'POST',
         headers: {
@@ -345,10 +346,20 @@ function guardar_chat(titulo,state){
     .then(response => response.json())
     .then(messages => {
         var mensajes = JSON.stringify(messages)
-        const links = ""
-        if(sessionStorage.getItem(nombre + "Links")!= null){
-            links = sessionStorage.getItem(nombre + "Links")
+
+        let links_values = 0
+        for(i=0;i<links.length;i++){
+            if(links[0].value !== "") {
+                links_values++
+            }
         }
+        if(links_values===0){
+            links = ""
+        }
+        else{
+            links = sessionStorage.getItem(nombre+"Links")
+        }
+        console.log(links)
         fetch("http://localhost:3000/guardar_chat", {
             method: 'POST',
             headers: {
