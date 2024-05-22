@@ -55,19 +55,25 @@ function train_entrenamiento(restablecer){
             }
         )
     })
-    .then(response => {
-        response.json()
-    })
+    .then(response => response.json())
     .then(data => {
         progressbar.style.display="none"
         document.removeEventListener('click', bloquearClick, true)
         document.removeEventListener('keydown', bloquearTeclado, true)
-
-        sessionStorage.setItem(nombre+"Modelo",selectedOptionmodelo.id)
-        sessionStorage.setItem(nombre+"Idioma",selectedOptionidioma.id)
-        sessionStorage.setItem(nombre+"Temperatura",temperatura)
-        sessionStorage.setItem(nombre+"Prompt",promptt)
-        sessionStorage.setItem(nombre+"Links",varcharString)
+        
+        if(data.mensaje == "Link Incorrecto"){
+            const incorrecto = document.querySelector(".incorrecto")
+            incorrecto.style.display = "block"
+            setTimeout(() => {
+                incorrecto.style.display = "none"
+            }, 3000)
+        }else{
+            sessionStorage.setItem(nombre+"Modelo",selectedOptionmodelo.id)
+            sessionStorage.setItem(nombre+"Idioma",selectedOptionidioma.id)
+            sessionStorage.setItem(nombre+"Temperatura",temperatura)
+            sessionStorage.setItem(nombre+"Prompt",promptt)
+            sessionStorage.setItem(nombre+"Links",varcharString)
+        }
     })
 }
 const entrenamiento = document.querySelector(".train");

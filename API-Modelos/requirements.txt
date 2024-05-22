@@ -1,5 +1,6 @@
 Flask
 requests
+validators
 flask_cors
 accelerate
 transformers

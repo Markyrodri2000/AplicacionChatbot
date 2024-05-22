@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 import paramiko
+import requests
+import validators
 
 app = Flask(__name__)
 CORS(app)
@@ -75,6 +77,18 @@ class SSH:
     def terminar_conexion(self):
         print("Conexión SSH cerrada correctamente...")
         self.ssh.close()
+    
+    def validar_link(self,link):
+
+        if not validators.url(link):
+            return False
+        else:
+            response = requests.head(link,allow_redirects=True)
+            if(response.status_code == 200):
+                return True
+            else:
+                return False
+
 
 ssh = SSH()
 
@@ -91,8 +105,21 @@ def post_data():
 def post_data_2():
     req = request.json
     
-    respuesta = ssh.instrucciones(ENTRENAR(json.dumps(req)))
+    links = True
 
+    if(req['link'][0]!= ''):
+        for link in req['link']:
+            if (ssh.validar_link(link) == False):
+                links = False
+                break
+    
+    if(links):
+        respuesta = ssh.instrucciones(ENTRENAR(json.dumps(req)))
+    
+    else:
+        respuesta = "Link Incorrecto"
+
+    print(respuesta)
     return jsonify({"mensaje": respuesta})
 
 @app.route('/get_mensajes', methods=['POST'])
