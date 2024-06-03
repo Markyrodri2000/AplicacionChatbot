@@ -4,8 +4,10 @@ flask_cors
 accelerate
 transformers
 langchain
+langchain-community
 langchain-chroma 
 beautifulsoup4
+peft
 faiss-cpu
 einops
 bitsandbytes

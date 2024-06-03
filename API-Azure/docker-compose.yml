@@ -11,6 +11,20 @@ services:
       - 8000:8000
     volumes:
       - ./API-Modelos/:/api
+  Ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ./Ollama/models:/ollama/models
+    environment:
+      - OLLAMA_MODELS=/ollama/models
+    depends_on:
+      - API
+    links:
+      - API
+    container_name: ollama
+  
 
 
   
