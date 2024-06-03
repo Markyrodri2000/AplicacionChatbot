@@ -8,7 +8,7 @@ import validators
 app = Flask(__name__)
 CORS(app)
 
-HOSTNAME = '52.143.134.115'
+HOSTNAME = '68.221.200.69'
 USERNAME = 'azureuser'
 PORT = 50000
 def COMMAND_POST(mensaje,id):
