@@ -37,6 +37,12 @@
     height: 100px; 
     width: 300px; 
 }
+.link,
+.document,
+.dataset{
+    width: 400px;
+    height: 30px;
+}
 
 .barra {
     position: relative;
@@ -78,7 +84,11 @@
 }
 
 .añadirLink,
-.quitarLink{
+.quitarLink,
+.añadirDocument,
+.quitarDocument,
+.añadirDataset,
+.quitarDataset{
     width: 20px;
     height: 20px;
     float:left;

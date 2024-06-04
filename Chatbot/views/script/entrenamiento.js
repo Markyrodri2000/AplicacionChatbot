@@ -37,6 +37,10 @@ function train_entrenamiento(restablecer){
     link = document.querySelectorAll(".link")
     let linkTexts = Array.from(link).map(link => link.value)
     let varcharString = linkTexts.join(',')
+
+    dataset = document.querySelectorAll(".dataset")
+    let linkDataset = Array.from(dataset).map(dataset => dataset.value)
+    let varcharStringData = linkDataset.join(',')
     
     fetch("http://localhost:8000/entrenar",{
         method: 'POST',
@@ -50,8 +54,10 @@ function train_entrenamiento(restablecer){
                 idioma: selectedValueidioma,
                 modelo: selectedValuemodelo,
                 link: linkTexts,
+                dataset: linkDataset,
                 id: sessionStorage.getItem(nombre+"Contador"),
-                restablecer: restablecer
+                restablecer: restablecer,
+
             }
         )
     })
@@ -73,6 +79,7 @@ function train_entrenamiento(restablecer){
             sessionStorage.setItem(nombre+"Temperatura",temperatura)
             sessionStorage.setItem(nombre+"Prompt",promptt)
             sessionStorage.setItem(nombre+"Links",varcharString)
+            sessionStorage.setItem(nombre+"Datasets",varcharStringData)
         }
     })
 }
@@ -105,6 +112,12 @@ const restart = document.querySelector("#restar_model").addEventListener('click'
         links[i].remove();
     }
 
+    let data = document.querySelectorAll(".dataset")
+    data[0].value = ""
+    for (let i = 1; i < data.length; i++) {
+        data[i].remove();
+    }
+
     train_entrenamiento(true)
 })
 
@@ -133,6 +146,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     })
 
+    let deleteData = document.querySelector('.quitarDataset')
+    deleteData.addEventListener('click', () => {
+        if (selectedInput) {
+            selectedInput.remove()
+            selectedInput = null
+        } else {
+            console.log('No input selected')
+        }
+    })
+
     let addImg = document.querySelector('.añadirLink')
     addImg.addEventListener('click', () => {
         let newInput = document.createElement('input')
@@ -142,6 +165,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.querySelector('.links').appendChild(newInput)
         addInputEventListener(newInput)
     })
+
+    let addDataset = document.querySelector('.añadirDataset')
+    addDataset.addEventListener('click', () => {
+        let newInput = document.createElement('input')
+        newInput.type = 'text'
+        newInput.classList.add("dataset")
+        newInput.placeholder = 'Nuevo dataset'
+        document.querySelector('.datasets').appendChild(newInput)
+        addInputEventListener(newInput)
+    })
 })
-
-

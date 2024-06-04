@@ -1,7 +1,27 @@
 from flask import Flask, request
 from flask_cors import CORS
-
+import torch
+from transformers import BitsAndBytesConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    TrainingArguments,
+    pipeline,
+    logging,
+)
+from peft import (
+    LoraConfig,
+    PeftConfig,
+    get_peft_model,
+    prepare_model_for_kbit_training,
+)
+from datasets import load_dataset
+from huggingface_hub import login
+from trl import SFTTrainer
 from langchain_community.llms import Ollama
+#from langchain_experimental.llms.ollama_functions import OllamaFunctions
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import (
     ChatPromptTemplate,
@@ -30,46 +50,7 @@ class Aplicacion:
 
     def __init__(self):
         self.chats = {}
-        self.crear_modelo("0", "llama2", "Eres un asistente servicial. Por favor responda las consultas de los usuarios.", 0.5, "es", "", False)
-
-    """def cargar_llama2(self):
-        login(token = "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")
-        model = "meta-llama/Llama-2-7b-chat-hf" 
-        tokenizer = AutoTokenizer.from_pretrained(model,use_auth_token=True)
-        pipeline = transformers.pipeline(
-            "text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            torch_dtype=torch.bfloat16,
-            device_map="auto",
-            max_new_tokens=150,
-            min_new_tokens=-1,
-            temperature=0.75,
-            do_sample=True,
-            top_k=30,
-            num_return_sequences=1,
-            eos_token_id=tokenizer.eos_token_id
-        )
-        llm=HuggingFacePipeline(pipeline=pipeline,model_kwargs={'temperature':0})
-
-        return llm
-    """
-
-    def verificar_enlace(link):
-        try:
-            # Realizar una solicitud GET al enlace
-            response = request.get(link)
-            
-            # Comprobar si la solicitud fue exitosa (código de estado 200)
-            if response.status_code == 200:
-                return True
-            else:
-                return False
-        except Exception as e:
-            # Capturar cualquier excepción que pueda ocurrir durante la solicitud
-            print(f"Error al verificar el enlace: {e}")
-            return False
-    
+        self.crear_modelo("0", "llama2", "Eres un asistente servicial. Por favor responda las consultas de los usuarios.", 0.5, "es", "", False,"")
 
     def simpleChatbot(self,promp):
 
@@ -79,8 +60,79 @@ class Aplicacion:
                 MessagesPlaceholder(variable_name="messages"),
             ]
         )
+
         chain = prompt | self.llm
         return chain
+    
+    def fine_tuning(self,dataset):
+        login(token = "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")
+    
+        """nf4_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
+        
+        SOLO ES POSIBLE CON GRÁFICA
+        """
+        
+        base_model = "meta-llama/Llama-2-7b-chat-hf" 
+        model = AutoModelForCausalLM.from_pretrained(
+            base_model
+        )
+        tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.padding_side = "right"
+
+        peft_params  = LoraConfig(
+            r=16,
+            lora_alpha=32,
+            target_modules=[
+                "q_proj",
+                "up_proj",
+                "o_proj",
+                "k_proj",
+                "down_proj",
+                "gate_proj",
+                "v_proj"
+            ],
+            lora_dropout=0.05,
+            bias="none",
+            task_type="CAUSAL_LM"
+        )
+
+
+        training_args = TrainingArguments(
+            output_dir="./results",
+            learning_rate=1e-3,
+            per_device_train_batch_size=32,
+            per_device_eval_batch_size=32,
+            num_train_epochs=2,
+            weight_decay=0.01,
+            evaluation_strategy="epoch",
+            save_strategy="epoch",
+            load_best_model_at_end=True,
+        )
+
+        for i in dataset:
+            data = load_dataset(i, split="train")
+
+            trainer = SFTTrainer(
+                model=model,
+                train_dataset=data,
+                peft_config=peft_params,
+                dataset_text_field="text",
+                max_seq_length=None,
+                tokenizer=tokenizer,
+                args=training_args,
+                packing=False,
+            )
+
+            trainer.train()
+
+        return model
+
 
     def retrieverChatbot(self,link,instrucciones):
         if(len(link)>1):
@@ -158,7 +210,7 @@ class Aplicacion:
         return "Creado"
 
 
-    def crear_modelo(self, id, modelo, prompt, temperatura, idioma, link,restablecer):
+    def crear_modelo(self, id, modelo, prompt, temperatura, idioma, link,restablecer,dataset):
 
         if(self.chats.get(id) is None):
             mensajes = ChatMessageHistory()
@@ -167,7 +219,8 @@ class Aplicacion:
 
             promp = self.translator.translate(prompt,src=idioma,dest='en').text
             
-            self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
+            self.llm = Ollama(model=modelo,base_url="http://ollama:11434", temperature = str(temperatura))
+            #self.fine_tuning(self.llm)
 
             chain = self.simpleChatbot(promp)
             simplechatbot = True
@@ -185,9 +238,16 @@ class Aplicacion:
             self.chats[id] = chat
 
         else:
-            self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
-            promp = self.translator.translate(prompt,dest='en').text
             
+            self.llm = Ollama(model=modelo,base_url="http://ollama:11434",temperature = str(temperatura))
+            
+
+            promp = self.translator.translate(prompt,dest='en').text
+
+            if(len(dataset) > 0 and dataset[0] != ''):
+                self.llm = self.fine_tuning(dataset)
+                
+
             if(len(link) > 0 and link[0] != ''):
                 chain = self.retrieverChatbot(link,promp)
                 simplechatbot = False
@@ -263,10 +323,11 @@ def post_data_2():
     prompt = request.json['prompt']
     idioma = request.json['idioma']
     link = request.json['link']
+    dataset = request.json['dataset']
     id = request.json['id']
     restablecer = request.json['restablecer']
 
-    res = modelo.crear_modelo(id,nombre_modelo, prompt, temperatura, idioma, link, restablecer)
+    res = modelo.crear_modelo(id,nombre_modelo, prompt, temperatura, idioma, link, restablecer,dataset)
 
     return res
 
