@@ -64,7 +64,7 @@ class Aplicacion:
         chain = prompt | self.llm
         return chain
     
-    def fine_tuning(self,dataset):
+    def fine_tuning(self,dataset,modelo):
         login(token = "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")
     
         """nf4_config = BitsAndBytesConfig(
@@ -76,8 +76,15 @@ class Aplicacion:
         
         SOLO ES POSIBLE CON GRÁFICA
         """
-        
-        base_model = "meta-llama/Llama-2-7b-chat-hf" 
+        base_model = "meta-llama/Llama-2-7b-chat-hf"
+
+        if(modelo!="llama2"):
+            if(modelo == "mistral"):
+                base_model = "mistralai/Mistral-7B-v0.3"
+            else:
+                if(modelo == "gemma"):
+                    base_model = "google/gemma-7b"
+
         model = AutoModelForCausalLM.from_pretrained(
             base_model
         )
@@ -103,16 +110,25 @@ class Aplicacion:
         )
 
 
-        training_args = TrainingArguments(
-            output_dir="./results",
-            learning_rate=1e-3,
-            per_device_train_batch_size=32,
-            per_device_eval_batch_size=32,
-            num_train_epochs=2,
-            weight_decay=0.01,
-            evaluation_strategy="epoch",
+        training_arguments = TrainingArguments(
+            per_device_train_batch_size=4,
+            gradient_accumulation_steps=4,
+            optim="paged_adamw_32bit",
+            logging_steps=1,
+            learning_rate=1e-4,
+            fp16=True,
+            max_grad_norm=0.3,
+            num_train_epochs=1,
+            evaluation_strategy="steps",
+            eval_steps=0.2,
+            warmup_ratio=0.05,
             save_strategy="epoch",
-            load_best_model_at_end=True,
+            group_by_length=True,
+            output_dir="./results",
+            report_to="tensorboard",
+            save_safetensors=True,
+            lr_scheduler_type="cosine",
+            seed=42,
         )
 
         for i in dataset:
@@ -123,15 +139,15 @@ class Aplicacion:
                 train_dataset=data,
                 peft_config=peft_params,
                 dataset_text_field="text",
-                max_seq_length=None,
+                max_seq_length=4096,
                 tokenizer=tokenizer,
-                args=training_args,
-                packing=False,
+                args=training_arguments,
             )
-
+            print("PREEE")
             trainer.train()
+            print("ENTRENADOOO")
 
-        return model
+        return "Creado"
 
 
     def retrieverChatbot(self,link,instrucciones):
@@ -220,7 +236,6 @@ class Aplicacion:
             promp = self.translator.translate(prompt,src=idioma,dest='en').text
             
             self.llm = Ollama(model=modelo,base_url="http://ollama:11434", temperature = str(temperatura))
-            #self.fine_tuning(self.llm)
 
             chain = self.simpleChatbot(promp)
             simplechatbot = True
@@ -245,7 +260,7 @@ class Aplicacion:
             promp = self.translator.translate(prompt,dest='en').text
 
             if(len(dataset) > 0 and dataset[0] != ''):
-                self.llm = self.fine_tuning(dataset)
+                self.llm = self.fine_tuning(dataset,modelo)
                 
 
             if(len(link) > 0 and link[0] != ''):
